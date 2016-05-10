@@ -1,0 +1,50 @@
+{
+  "name": "sitemap-generator",
+  "version": "4.0.0",
+  "description": "Easily create XML sitemaps for your website.",
+  "homepage": "https://github.com/lgraubner/sitemap-generator",
+  "author": {
+    "name": "Lars Graubner",
+    "email": "mail@larsgraubner.de",
+    "url": "http://larsgraubner.de"
+  },
+  "keywords": [
+    "sitemap",
+    "xml",
+    "sitemap.xml",
+    "generator",
+    "crawler",
+    "seo",
+    "google",
+    "ecosystem:node"
+  ],
+  "main": "SitemapGenerator.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lgraubner/sitemap-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lgraubner/sitemap-generator/issues"
+  },
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "lodash.assign": "^4.0.8",
+    "lodash.forin": "^4.1.0",
+    "robots": "^0.9.4",
+    "simplecrawler": "^0.7.0",
+    "xmlbuilder": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=0.12"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "^0.14.0",
+    "eslint": "^2.9.0",
+    "eslint-config-graubnla": "^2.0.2",
+    "lodash.isobject": "^3.0.2"
+  },
+  "scripts": {
+    "test": "eslint SitemapGenerator.js && ava test/all.js"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "extends": "graubnla/legacy",
+  "rules": {
+    "vars-on-top": 0
+  }
+}
