@@ -7,8 +7,10 @@ var localhost = require('./lib/constants').localhost;
 var server = require('./lib/server');
 
 // start testserver
-test.before(function () {
-  server.listen(port, localhost);
+test.cb.before(function (t) {
+  server.listen(port, localhost, function () {
+    t.end();
+  });
 });
 
 require('./events');
@@ -18,7 +20,9 @@ require('./options');
 require('./parsing');
 require('./sitemap');
 
-test.after(function () {
+test.cb.after(function (t) {
   // stop test server
-  server.close();
+  server.close(function () {
+    t.end();
+  });
 });

@@ -16,7 +16,7 @@ test.cb('should return valid sitemap', function (t) {
 
   generator.on('done', function (sitemap) {
     // sitemap
-    t.regex(sitemap, /^<\?xml version="1.0" encoding="UTF-8"\?>/, 'has xml header');
+    t.regex(sitemap, /^<\?xml version="1.0" encoding="UTF\-8"\?>/, 'has xml header');
     var urlsRegex = /<urlset xmlns=".+?">(.|\n)+<\/urlset>/;
     t.regex(sitemap, urlsRegex, 'has urlset property');
     t.is(sitemap.match(/<url>(.|\n)+?<\/url>/g).length, 2, 'contains url properties');
