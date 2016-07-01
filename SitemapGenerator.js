@@ -110,6 +110,9 @@ function SitemapGenerator(uri, options) {
     return !parsedUrl.path.match(extRegex);
   });
 
+  // array with urls that are crawled but shouldn't be indexed
+  this.crawler.noindex = [];
+
   // custom discover function
   this.crawler.discoverResources = this._discoverResources;
 
@@ -169,6 +172,12 @@ SitemapGenerator.prototype._discoverResources = function (buffer, queueItem) {
 
   // cancel if meta robots nofollow is present
   var metaRobots = $('meta[name="robots"]');
+
+  // add to noindex for it later to be removed from the store before a sitemap is built
+  if (metaRobots.length && /noindex/i.test(metaRobots.attr('content'))) {
+    this.noindex.push(queueItem.url);
+  }
+
   if (metaRobots.length && /nofollow/i.test(metaRobots.attr('content'))) {
     return [];
   }
@@ -218,7 +227,16 @@ SitemapGenerator.prototype._discoverResources = function (buffer, queueItem) {
  */
 SitemapGenerator.prototype._buildXML = function (callback) {
   var sitemap = null;
+
   if (this.store.found.length > 0) {
+    // Remove urls with a robots meta tag 'noindex' before building the sitemap
+    this.crawler.noindex.forEach(function (page) {
+      var index = this.store.found.indexOf(page);
+      if (index !== -1) {
+        this.store.found.splice(index, 1);
+      }
+    }, this);
+
     // xml base
     var xml = xmlbuilder.create('urlset', { version: '1.0', encoding: 'UTF-8' })
       .att('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
