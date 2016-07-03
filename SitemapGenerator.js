@@ -74,7 +74,12 @@ function SitemapGenerator(uri, options) {
   // create Crawler
   this.crawler = new Crawler(this.baseUrl.hostname);
   // set initial port
-  this.crawler.initialPort = parseInt(this.options.port);
+  var port = parseInt(this.options.port);
+  // set port to 443 if https is present, respect user options
+  if (this.baseUrl.protocol === 'https:' && this.options.port === 80) {
+    port = 443;
+  }
+  this.crawler.initialPort = port;
 
   // set initial path to subpage if provided
   var initialPath = '/';
