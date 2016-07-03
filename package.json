@@ -1,6 +1,6 @@
 {
   "name": "sitemap-generator",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Easily create XML sitemaps for your website.",
   "homepage": "https://github.com/lgraubner/sitemap-generator",
   "author": {
@@ -28,8 +28,8 @@
   },
   "dependencies": {
     "cheerio": "^0.20.0",
-    "lodash.assign": "^4.0.8",
-    "lodash.forin": "^4.1.0",
+    "lodash.assign": "^4.0.9",
+    "lodash.forin": "^4.2.0",
     "robots": "^0.9.4",
     "simplecrawler": "^0.7.0",
     "xmlbuilder": "^8.2.2"
@@ -39,8 +39,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "ava": "^0.14.0",
-    "eslint": "^2.9.0",
+    "ava": "^0.15.2",
+    "eslint": "^3.0.0",
     "eslint-config-graubnla": "^2.0.2",
     "lodash.isobject": "^3.0.2"
   },
