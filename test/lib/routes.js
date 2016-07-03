@@ -7,6 +7,7 @@ module.exports = {
       '<a href="/disallowed">disallowed</a>',
       '<a href="img.jpg">Image</a>',
       '<a href="/single">Single</a>',
+      '<a href="/noindex">Noindex</a>',
     ].join('\n'));
     res.end();
   },
@@ -138,6 +139,14 @@ module.exports = {
 
   '/script': function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end();
+  },
+
+  '/noindex': function (req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.write([
+      '<meta name="robots" content="noindex,follow">',
+    ].join('\n'));
     res.end();
   },
 

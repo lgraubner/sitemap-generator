@@ -38,6 +38,22 @@ test.cb('should respect "robots.txt" rules', function (t) {
   generator.start();
 });
 
+test.cb('should ignore pages with "noindex" rule', function (t) {
+  t.plan(2);
+
+  var generator = new SitemapGenerator(localhost, {
+    port: port,
+  });
+
+  generator.on('done', function (sitemap, store) {
+    t.is(store.found.indexOf(buildUrl(localhost, port, '/noindex')), -1);
+    t.not(store.ignored.indexOf(buildUrl(localhost, port, '/noindex')), -1);
+    t.end();
+  });
+
+  generator.start();
+});
+
 test.cb('should restrict subsequent requests to given path', function (t) {
   t.plan(1);
 
