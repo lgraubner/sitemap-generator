@@ -233,7 +233,10 @@ SitemapGenerator.prototype._buildXML = function (callback) {
     this.crawler.noindex.forEach(function (page) {
       var index = this.store.found.indexOf(page);
       if (index !== -1) {
-        this.store.found.splice(index, 1);
+        // remove url from found array
+        var ignored = this.store.found.splice(index, 1)[0];
+        // add url to ignored url
+        this.store.ignored.push(ignored);
       }
     }, this);
 
