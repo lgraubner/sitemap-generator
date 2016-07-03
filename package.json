@@ -38,7 +38,7 @@
     "node": ">=0.12"
   },
   "license": "MIT",
-  "pre-commit": ["lint"],
+  "pre-commit": ["precommit-msg", "lint"],
   "devDependencies": {
     "ava": "^0.15.2",
     "eslint": "^3.0.0",
@@ -48,6 +48,7 @@
   },
   "scripts": {
     "lint": "eslint SitemapGenerator.js",
-    "test": "npm run lint && ava test/all.js"
+    "test": "npm run lint && ava test/all.js",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   }
 }
