@@ -38,13 +38,16 @@
     "node": ">=0.12"
   },
   "license": "MIT",
+  "pre-commit": ["lint"],
   "devDependencies": {
     "ava": "^0.15.2",
     "eslint": "^3.0.0",
     "eslint-config-graubnla": "^2.0.2",
-    "lodash.isobject": "^3.0.2"
+    "lodash.isobject": "^3.0.2",
+    "pre-commit": "^1.1.3"
   },
   "scripts": {
-    "test": "eslint SitemapGenerator.js && ava test/all.js"
+    "lint": "eslint SitemapGenerator.js",
+    "test": "npm run lint && ava test/all.js"
   }
 }
