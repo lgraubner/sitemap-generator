@@ -42,7 +42,7 @@
   "devDependencies": {
     "ava": "^0.15.2",
     "eslint": "^3.0.0",
-    "eslint-config-graubnla": "^2.0.2",
+    "eslint-config-graubnla": "^3.0.0",
     "lodash.isobject": "^3.0.2",
     "pre-commit": "^1.1.3"
   },
