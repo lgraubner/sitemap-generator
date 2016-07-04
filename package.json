@@ -1,6 +1,6 @@
 {
   "name": "sitemap-generator",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Easily create XML sitemaps for your website.",
   "homepage": "https://github.com/lgraubner/sitemap-generator",
   "author": {
@@ -38,7 +38,10 @@
     "node": ">=0.12"
   },
   "license": "MIT",
-  "pre-commit": ["precommit-msg", "lint"],
+  "pre-commit": [
+    "precommit-msg",
+    "lint"
+  ],
   "devDependencies": {
     "ava": "^0.15.2",
     "eslint": "^3.0.0",
