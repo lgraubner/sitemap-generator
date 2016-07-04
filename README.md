@@ -15,7 +15,7 @@ $ npm install -S sitemap-generator
 var SitemapGenerator = require('sitemap-generator');
 
 // create generator
-var generator = new SitemapGenerator('example.com');
+var generator = new SitemapGenerator('http://example.com');
 
 // register event listeners
 generator.on('done', function (sitemap) {
@@ -28,14 +28,12 @@ generator.start();
 
 The crawler will fetch all folder URL pages and file types [parsed by Google](https://support.google.com/webmasters/answer/35287?hl=en). If present the `robots.txt` will be taken into account and possible rules are applied for each URL to consider if it should be added to the sitemap. Also the crawler will not fetch URL's from a page if the robots meta tag with the value `nofollow` is present and ignore them completely if `noindex` rule is present. The crawler is able to apply the `base` value to found links.
 
-The protocol can be omitted, if the domain uses `http` or redirects to `https` are set up.
-
 ## Options
 
 You can provide some options to alter the behaviour of the crawler.
 
 ```JavaScript
-var generator = new SitemapGenerator('example.com', {
+var generator = new SitemapGenerator('http://example.com', {
   port: 80,
   restrictToBasepath: false,
   stripQuerystring: true,
