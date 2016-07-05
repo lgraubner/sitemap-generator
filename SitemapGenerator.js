@@ -113,6 +113,9 @@ function SitemapGenerator(uri, options) {
   // array with urls that are crawled but shouldn't be indexed
   this.crawler.noindex = [];
 
+  // object conaining the sitemap-urls' tag information
+  this.crawler.optionalSitemapTags = {};
+
   // custom discover function
   this.crawler.discoverResources = this._discoverResources;
 
@@ -182,6 +185,22 @@ SitemapGenerator.prototype._discoverResources = function (buffer, queueItem) {
     return [];
   }
 
+
+  var changefreq = $('meta[name="sitemap-changefreq"]').attr('content');
+  var lastmod = $('meta[name="sitemap-lastmod"]').attr('content');
+  var priority = $('meta[name="sitemap-priority"]').attr('content');
+  var optionalSitemapTags = {};
+  if (changefreq) {
+    optionalSitemapTags.changefreq = changefreq;
+  }
+  if (lastmod) {
+    optionalSitemapTags.lastmod = lastmod;
+  }
+  if (priority) {
+    optionalSitemapTags.priority = priority;
+  }
+  this.optionalSitemapTags[queueItem.url] = optionalSitemapTags;
+
   // parse links
   var links = $('a[href]').map(function () {
     var href = $(this).attr('href');
@@ -244,12 +263,18 @@ SitemapGenerator.prototype._buildXML = function (callback) {
     var xml = xmlbuilder.create('urlset', { version: '1.0', encoding: 'UTF-8' })
       .att('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 
+    var optionalSitemapTags = this.crawler.optionalSitemapTags;
     // add elements
     forIn(this.store.found, function (foundURL) {
       xml.ele('url')
-        .ele({
-          loc: foundURL,
-        });
+        .ele(
+          assign(
+            {
+              loc: foundURL,
+            },
+            optionalSitemapTags[foundURL]
+          )
+        );
     });
 
     // finish xml markup
