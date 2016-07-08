@@ -187,7 +187,7 @@ SitemapGenerator.prototype._discoverResources = function (buffer, queueItem) {
 
 
   var changefreq = $('meta[name="sitemap-changefreq"]').attr('content');
-  var lastmod = $('meta[name="sitemap-lastmod"]').attr('content');
+  var lastmod = $('meta[http-equiv="last-modified"]').attr('content');
   var priority = $('meta[name="sitemap-priority"]').attr('content');
   var optionalSitemapTags = {};
   if (changefreq) {
