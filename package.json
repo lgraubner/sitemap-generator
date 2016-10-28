@@ -1,6 +1,6 @@
 {
   "name": "sitemap-generator",
-  "version": "4.1.1",
+  "version": "5.0.0",
   "description": "Easily create XML sitemaps for your website.",
   "homepage": "https://github.com/lgraubner/sitemap-generator",
   "author": {
@@ -18,7 +18,7 @@
     "google",
     "ecosystem:node"
   ],
-  "main": "SitemapGenerator.js",
+  "main": "lib/SitemapGenerator.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/lgraubner/sitemap-generator.git"
@@ -27,11 +27,11 @@
     "url": "https://github.com/lgraubner/sitemap-generator/issues"
   },
   "dependencies": {
-    "cheerio": "^0.20.0",
+    "cheerio": "^0.22.0",
     "lodash.assign": "^4.0.9",
     "lodash.forin": "^4.2.0",
     "robots": "^0.9.4",
-    "simplecrawler": "^0.7.0",
+    "simplecrawler": "1.0.3",
     "xmlbuilder": "^8.2.2"
   },
   "engines": {
@@ -43,8 +43,8 @@
     "lint"
   ],
   "devDependencies": {
-    "ava": "^0.15.2",
-    "eslint": "^3.0.0",
+    "ava": "^0.16.0",
+    "eslint": "^3.8.1",
     "eslint-config-graubnla": "^3.0.0",
     "lodash.isobject": "^3.0.2",
     "pre-commit": "^1.1.3"

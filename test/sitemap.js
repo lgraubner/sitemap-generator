@@ -1,7 +1,6 @@
 /* eslint no-unused-vars:0 */
 var test = require('ava');
 var SitemapGenerator = require('../SitemapGenerator');
-var port = require('./lib/constants').port;
 var localhost = require('./lib/constants').localhost;
 
 /**
@@ -10,9 +9,7 @@ var localhost = require('./lib/constants').localhost;
 test.cb('should return valid sitemap', function (t) {
   t.plan(4);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost);
 
   generator.on('done', function (sitemap) {
     // sitemap

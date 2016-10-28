@@ -12,9 +12,7 @@ var buildUrl = require('./lib/helpers').buildUrl;
 test.cb('should handle absolute links', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost + '/absolute', {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost + '/absolute');
 
   generator.on('done', function (sitemap, store) {
     t.not(store.found.indexOf(buildUrl(localhost, port, '/single')), -1);
@@ -27,9 +25,7 @@ test.cb('should handle absolute links', function (t) {
 test.cb('should handle "//" links', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost + '/protocol', {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost + '/protocol');
 
   generator.on('done', function (sitemap, store) {
     t.not(store.found.indexOf(buildUrl(localhost, port, '/')), -1);
@@ -43,9 +39,7 @@ test.cb('should handle "//" links', function (t) {
 test.cb('should handle "/" links', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost);
 
   generator.on('done', function (sitemap, store) {
     t.not(store.found.indexOf(buildUrl(localhost, port, '/single')), -1);
@@ -58,9 +52,7 @@ test.cb('should handle "/" links', function (t) {
 test.cb('should handle "./" links', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost + '/relative-2.html', {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost + '/relative-2.html');
 
   generator.on('done', function (sitemap, store) {
     t.not(store.found.indexOf(buildUrl(localhost, port, '/')), -1);
@@ -73,9 +65,7 @@ test.cb('should handle "./" links', function (t) {
 test.cb('should handle "../" links', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost + '/relative/', {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost + '/relative/');
 
   generator.on('done', function (sitemap, store) {
     t.not(store.found.indexOf(buildUrl(localhost, port, '/')), -1);
@@ -88,9 +78,7 @@ test.cb('should handle "../" links', function (t) {
 test.cb('should handle absolute base href tag', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost + '/base', {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost + '/base');
 
   generator.on('done', function (sitemap, store) {
     t.not(store.found.indexOf(buildUrl(localhost, port, '/single')), -1);
@@ -103,9 +91,7 @@ test.cb('should handle absolute base href tag', function (t) {
 test.cb('should handle relative base href tag', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost + '/base-2', {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost + '/base-2');
 
   generator.on('done', function (sitemap, store) {
     t.not(store.found.indexOf(buildUrl(localhost, port, '/depth/sub')), -1);
@@ -119,7 +105,6 @@ test.cb('should respect robots meta tag', function (t) {
   t.plan(1);
 
   var generator = new SitemapGenerator(localhost + '/robotsmeta', {
-    port: port,
     restrictToBasepath: true,
   });
 
@@ -134,9 +119,7 @@ test.cb('should respect robots meta tag', function (t) {
 test.cb('should only parse links', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost + '/noscripts', {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost + '/noscripts');
 
   generator.on('done', function (sitemap, store) {
     t.is(store.found.indexOf(buildUrl(localhost, port, '/script')), -1);

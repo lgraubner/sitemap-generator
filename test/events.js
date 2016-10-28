@@ -2,7 +2,6 @@
 var test = require('ava');
 var SitemapGenerator = require('../SitemapGenerator');
 var isObject = require('lodash.isobject');
-var port = require('./lib/constants').port;
 var localhost = require('./lib/constants').localhost;
 
 /**
@@ -11,9 +10,7 @@ var localhost = require('./lib/constants').localhost;
 test.cb('fetch event should provide statusCode and fetched url', function (t) {
   t.plan(4);
 
-  var generator = new SitemapGenerator(localhost + '/single', {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost + '/single');
 
   generator.on('fetch', function (status, url) {
     t.is(typeof status, 'string', 'status is a string');
@@ -31,9 +28,7 @@ test.cb('fetch event should provide statusCode and fetched url', function (t) {
 test.cb('ignore event should provide ignored url', function (t) {
   t.plan(2);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost);
 
   generator.on('ignore', function (url) {
     t.is(typeof url, 'string', 'url is a string');
@@ -48,9 +43,7 @@ test.cb('ignore event should provide ignored url', function (t) {
 test.cb('done event should provide generated sitemap and url store', function (t) {
   t.plan(2);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost);
 
   generator.on('done', function (sitemap, store) {
     // sitemap

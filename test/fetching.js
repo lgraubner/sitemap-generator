@@ -1,9 +1,9 @@
 /* eslint no-unused-vars:0 */
 var test = require('ava');
 var SitemapGenerator = require('../SitemapGenerator');
-var port = require('./lib/constants').port;
 var localhost = require('./lib/constants').localhost;
 var buildUrl = require('./lib/helpers').buildUrl;
+var port = require('./lib/constants').port;
 
 /**
  * Fetching
@@ -11,9 +11,7 @@ var buildUrl = require('./lib/helpers').buildUrl;
 test.cb('should ignore excluded file types', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost);
 
   generator.on('done', function (sitemap, store) {
     t.regex(sitemap, /[^img.jpg]/, 'does not contain img.jpg');
@@ -26,9 +24,7 @@ test.cb('should ignore excluded file types', function (t) {
 test.cb('should respect "robots.txt" rules', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost);
 
   generator.on('done', function (sitemap, store) {
     t.not(store.ignored.indexOf(buildUrl(localhost, port, '/disallowed')), -1);
@@ -41,9 +37,7 @@ test.cb('should respect "robots.txt" rules', function (t) {
 test.cb('should ignore pages with "noindex" rule', function (t) {
   t.plan(2);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(localhost);
 
   generator.on('done', function (sitemap, store) {
     t.is(store.found.indexOf(buildUrl(localhost, port, '/noindex')), -1);
@@ -58,7 +52,6 @@ test.cb('should restrict subsequent requests to given path', function (t) {
   t.plan(1);
 
   var generator = new SitemapGenerator(localhost + '/restricted', {
-    port: port,
     restrictToBasepath: true,
   });
 
@@ -79,7 +72,6 @@ test.cb('should include query strings if stripQuerystring is "false"', function 
   t.plan(1);
 
   var generator = new SitemapGenerator(localhost + '/querystring', {
-    port: port,
     stripQuerystring: false,
   });
 
