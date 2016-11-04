@@ -1,4 +1,6 @@
 /* eslint-disable */
+var fs = require('fs');
+var path = require('path');
 
 module.exports = {
   '/': function (req, res) {
@@ -15,7 +17,7 @@ module.exports = {
   '/relative': function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.write([
-      '<a href="./">disallowed</a>',
+      '<a href="./">test</a>',
     ].join('\n'));
     res.end();
   },
@@ -66,7 +68,7 @@ module.exports = {
   '/absolute': function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.write([
-      '<a href="http://127.0.0.1:5173/single">Single</a>',
+      '<a href="http://127.0.0.1:5174/single">Single</a>',
     ].join('\n'));
     res.end();
   },
@@ -74,7 +76,7 @@ module.exports = {
   '/base': function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.write([
-      '<base href="http://127.0.0.1:5173/">',
+      '<base href="http://127.0.0.1:5174/">',
       '<a href="single">Single</a>',
     ].join('\n'));
     res.end();
@@ -97,7 +99,7 @@ module.exports = {
   '/protocol': function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.write([
-      '<a href="//127.0.0.1:5173">Home</a>',
+      '<a href="//127.0.0.1:5174">Home</a>',
     ].join('\n'));
     res.end();
   },
@@ -151,8 +153,9 @@ module.exports = {
   },
 
   '/robots.txt': function (req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.write('User-agent: *\nDisallow: /disallowed');
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    var robots = fs.readFileSync(path.resolve('lib/robots.txt'));
+    res.write(robots.toString());
     res.end();
   },
 };

@@ -44,14 +44,14 @@
   ],
   "devDependencies": {
     "ava": "^0.16.0",
-    "eslint": "^3.8.1",
+    "eslint": "^3.9.1",
     "eslint-config-graubnla": "^3.0.0",
     "lodash.isobject": "^3.0.2",
     "pre-commit": "^1.1.3"
   },
   "scripts": {
     "lint": "eslint SitemapGenerator.js",
-    "test": "npm run lint && ava test/all.js",
+    "test": "npm run lint && ava test/all.js --timeout=10s",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   }
 }

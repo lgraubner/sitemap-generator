@@ -1,7 +1,7 @@
 /* eslint no-unused-vars:0 */
 var test = require('ava');
-var SitemapGenerator = require('../SitemapGenerator');
-var localhost = require('./lib/constants').localhost;
+var SitemapGenerator = require('../lib/SitemapGenerator');
+var baseUrl = require('./lib/constants').baseUrl;
 
 /**
  * Options
@@ -10,7 +10,7 @@ test('should extend default options with user options', function (t) {
   t.plan(1);
 
   var options = {};
-  var generator = new SitemapGenerator(localhost, options);
+  var generator = new SitemapGenerator(baseUrl, options);
   t.deepEqual(generator.options, {
     stripQuerystring: true,
     restrictToBasepath: false,

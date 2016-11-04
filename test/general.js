@@ -1,7 +1,9 @@
 /* eslint no-unused-vars:0 */
 var test = require('ava');
-var SitemapGenerator = require('../SitemapGenerator');
-var localhost = require('./lib/constants').localhost;
+var SitemapGenerator = require('../lib/SitemapGenerator');
+var baseUrl = require('./lib/constants').baseUrl;
+var port = require('./lib/constants').port;
+var buildUrl = require('./lib/helpers').buildUrl;
 
 /**
  * General
@@ -19,7 +21,7 @@ test('should throw an error if no url is provided', function (t) {
 test('should not start another crawl if currently crawling', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost);
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''));
 
   generator.start();
 
@@ -29,7 +31,7 @@ test('should not start another crawl if currently crawling', function (t) {
 test('should change status when crawler starts', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost);
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''));
 
   var initialStatus = generator.status;
 

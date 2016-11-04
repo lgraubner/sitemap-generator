@@ -1,8 +1,10 @@
 /* eslint no-unused-vars:0 */
 var test = require('ava');
-var SitemapGenerator = require('../SitemapGenerator');
+var SitemapGenerator = require('../lib/SitemapGenerator');
 var isObject = require('lodash.isobject');
-var localhost = require('./lib/constants').localhost;
+var baseUrl = require('./lib/constants').baseUrl;
+var port = require('./lib/constants').port;
+var buildUrl = require('./lib/helpers').buildUrl;
 
 /**
  * Events
@@ -10,7 +12,7 @@ var localhost = require('./lib/constants').localhost;
 test.cb('fetch event should provide statusCode and fetched url', function (t) {
   t.plan(4);
 
-  var generator = new SitemapGenerator(localhost + '/single');
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, '/single'));
 
   generator.on('fetch', function (status, url) {
     t.is(typeof status, 'string', 'status is a string');
@@ -28,7 +30,7 @@ test.cb('fetch event should provide statusCode and fetched url', function (t) {
 test.cb('ignore event should provide ignored url', function (t) {
   t.plan(2);
 
-  var generator = new SitemapGenerator(localhost);
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''));
 
   generator.on('ignore', function (url) {
     t.is(typeof url, 'string', 'url is a string');
@@ -43,7 +45,7 @@ test.cb('ignore event should provide ignored url', function (t) {
 test.cb('done event should provide generated sitemap and url store', function (t) {
   t.plan(2);
 
-  var generator = new SitemapGenerator(localhost);
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''));
 
   generator.on('done', function (sitemap, store) {
     // sitemap
