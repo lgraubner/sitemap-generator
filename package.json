@@ -35,7 +35,7 @@
     "xmlbuilder": "^8.2.2"
   },
   "engines": {
-    "node": ">=0.12"
+    "node": ">=4"
   },
   "license": "MIT",
   "pre-commit": [
