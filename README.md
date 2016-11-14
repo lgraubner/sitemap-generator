@@ -61,7 +61,7 @@ The Sitemap Generator emits several events using nodes `EventEmitter`.
 
 ### `fetch`
 
-Triggered when the crawler tries to fetch a ressource. Passes the status and the url as arguments. The status can be any HTTP status.
+Triggered when the crawler tries to fetch a resource. Passes the status and the url as arguments. The status can be any HTTP status.
 
 ```JavaScript
 generator.on('fetch', function (status, url) {
