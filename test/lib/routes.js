@@ -154,7 +154,7 @@ module.exports = {
 
   '/robots.txt': function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    var robots = fs.readFileSync(path.resolve('lib/robots.txt'));
+    var robots = fs.readFileSync(path.resolve('test/lib/robots.txt'));
     res.write(robots.toString());
     res.end();
   },

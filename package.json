@@ -43,11 +43,11 @@
     "lint"
   ],
   "devDependencies": {
-    "ava": "^0.16.0",
-    "eslint": "^3.9.1",
+    "ava": "^0.17.0",
+    "eslint": "^3.13.1",
     "eslint-config-graubnla": "^3.0.0",
     "lodash.isobject": "^3.0.2",
-    "pre-commit": "^1.1.3"
+    "pre-commit": "^1.2.2"
   },
   "scripts": {
     "lint": "eslint SitemapGenerator.js",
