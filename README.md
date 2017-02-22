@@ -34,18 +34,12 @@ You can provide some options to alter the behaviour of the crawler.
 
 ```JavaScript
 var generator = new SitemapGenerator('http://example.com', {
-  port: 80,
   restrictToBasepath: false,
   stripQuerystring: true,
 });
 ```
 
-### port
-
-Type: `number`  
-Default: `80`
-
-Set an alternative port number instead of the standard port `80`. Used for the initial request.
+Since version 5 port is not an option anymore. If you are using the default ports for http/https your are fine. If you are using a custom port just append it to the URL.
 
 ### restrictToBasepath
 
@@ -67,7 +61,7 @@ The Sitemap Generator emits several events using nodes `EventEmitter`.
 
 ### `fetch`
 
-Triggered when the crawler tries to fetch a ressource. Passes the status and the url as arguments. The status can be any HTTP status.
+Triggered when the crawler tries to fetch a resource. Passes the status and the url as arguments. The status can be any HTTP status.
 
 ```JavaScript
 generator.on('fetch', function (status, url) {

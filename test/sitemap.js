@@ -1,8 +1,9 @@
 /* eslint no-unused-vars:0 */
 var test = require('ava');
-var SitemapGenerator = require('../SitemapGenerator');
+var SitemapGenerator = require('../lib/SitemapGenerator');
+var baseUrl = require('./lib/constants').baseUrl;
 var port = require('./lib/constants').port;
-var localhost = require('./lib/constants').localhost;
+var buildUrl = require('./lib/helpers').buildUrl;
 
 /**
  * Sitemap
@@ -10,17 +11,15 @@ var localhost = require('./lib/constants').localhost;
 test.cb('should return valid sitemap', function (t) {
   t.plan(4);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''));
 
-  generator.on('done', function (sitemap) {
+  generator.on('done', function (sitemap, store) {
     // sitemap
     t.regex(sitemap, /^<\?xml version="1.0" encoding="UTF\-8"\?>/, 'has xml header');
     var urlsRegex = /<urlset xmlns=".+?">(.|\n)+<\/urlset>/;
     t.regex(sitemap, urlsRegex, 'has urlset property');
-    t.is(sitemap.match(/<url>(.|\n)+?<\/url>/g).length, 2, 'contains url properties');
-    t.is(sitemap.match(/<loc>(.|\n)+?<\/loc>/g).length, 2, 'contains loc properties');
+    t.truthy(sitemap.match(/<url>(.|\n)+?<\/url>/g), 'contains url properties');
+    t.truthy(sitemap.match(/<loc>(.|\n)+?<\/loc>/g), 'contains loc properties');
 
     t.end();
   });

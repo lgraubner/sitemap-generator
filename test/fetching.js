@@ -1,9 +1,9 @@
 /* eslint no-unused-vars:0 */
 var test = require('ava');
-var SitemapGenerator = require('../SitemapGenerator');
-var port = require('./lib/constants').port;
-var localhost = require('./lib/constants').localhost;
+var SitemapGenerator = require('../lib/SitemapGenerator');
+var baseUrl = require('./lib/constants').baseUrl;
 var buildUrl = require('./lib/helpers').buildUrl;
+var port = require('./lib/constants').port;
 
 /**
  * Fetching
@@ -11,9 +11,7 @@ var buildUrl = require('./lib/helpers').buildUrl;
 test.cb('should ignore excluded file types', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''));
 
   generator.on('done', function (sitemap, store) {
     t.regex(sitemap, /[^img.jpg]/, 'does not contain img.jpg');
@@ -26,12 +24,10 @@ test.cb('should ignore excluded file types', function (t) {
 test.cb('should respect "robots.txt" rules', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''));
 
   generator.on('done', function (sitemap, store) {
-    t.not(store.ignored.indexOf(buildUrl(localhost, port, '/disallowed')), -1);
+    t.is(store.found.indexOf(buildUrl(baseUrl, port, '/disallowed')), -1);
     t.end();
   });
 
@@ -41,13 +37,11 @@ test.cb('should respect "robots.txt" rules', function (t) {
 test.cb('should ignore pages with "noindex" rule', function (t) {
   t.plan(2);
 
-  var generator = new SitemapGenerator(localhost, {
-    port: port,
-  });
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''));
 
   generator.on('done', function (sitemap, store) {
-    t.is(store.found.indexOf(buildUrl(localhost, port, '/noindex')), -1);
-    t.not(store.ignored.indexOf(buildUrl(localhost, port, '/noindex')), -1);
+    t.is(store.found.indexOf(buildUrl(baseUrl, port, '/noindex')), -1);
+    t.not(store.ignored.indexOf(buildUrl(baseUrl, port, '/noindex')), -1);
     t.end();
   });
 
@@ -57,15 +51,14 @@ test.cb('should ignore pages with "noindex" rule', function (t) {
 test.cb('should restrict subsequent requests to given path', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost + '/restricted', {
-    port: port,
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, '/restricted'), {
     restrictToBasepath: true,
   });
 
   generator.on('done', function (sitemap, store) {
     var containsHome = false;
     store.found.reduce(function (prev, curr) {
-      containsHome = new RegExp(buildUrl(localhost, port, '/')).test(curr);
+      containsHome = new RegExp(buildUrl(baseUrl, port, '/')).test(curr);
     });
 
     t.falsy(containsHome);
@@ -78,13 +71,12 @@ test.cb('should restrict subsequent requests to given path', function (t) {
 test.cb('should include query strings if stripQuerystring is "false"', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost + '/querystring', {
-    port: port,
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, '/querystring'), {
     stripQuerystring: false,
   });
 
   generator.on('done', function (sitemap, store) {
-    t.not(store.found.indexOf(buildUrl(localhost, port, '/querystring?foo=bar')), -1);
+    t.not(store.found.indexOf(buildUrl(baseUrl, port, '/querystring?foo=bar')), -1);
     t.end();
   });
 
@@ -94,13 +86,13 @@ test.cb('should include query strings if stripQuerystring is "false"', function 
 test.cb('should ignore query strings if stripQuerystring is "true"', function (t) {
   t.plan(1);
 
-  var generator = new SitemapGenerator(localhost + '/querystring', {
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, '/querystring'), {
     port: port,
     stripQuerystring: true,
   });
 
   generator.on('done', function (sitemap, store) {
-    t.is(store.found.indexOf(buildUrl(localhost, port, '/querystring?foo=bar')), -1);
+    t.is(store.found.indexOf(buildUrl(baseUrl, port, '/querystring?foo=bar')), -1);
     t.end();
   });
 

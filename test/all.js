@@ -1,14 +1,14 @@
 /* eslint no-unused-vars:0 */
 var test = require('ava');
-var SitemapGenerator = require('../SitemapGenerator');
+var SitemapGenerator = require('../lib/SitemapGenerator');
 var port = require('./lib/constants').port;
-var localhost = require('./lib/constants').localhost;
+var baseUrl = require('./lib/constants').baseUrl;
 // test server
 var server = require('./lib/server');
 
 // start testserver
 test.cb.before(function (t) {
-  server.listen(port, localhost, function () {
+  server.listen(port, baseUrl, function () {
     t.end();
   });
 });
