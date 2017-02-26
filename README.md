@@ -103,6 +103,6 @@ Triggered when the crawler finished and the sitemap is created. Passes the creat
 
 ```JavaScript
 generator.on('done', function (sitemaps, store) {
-  // do something with the sitemap, e.g. save as file
+  // do something with the sitemaps, e.g. save as file
 });
 ```
