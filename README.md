@@ -18,8 +18,8 @@ var SitemapGenerator = require('sitemap-generator');
 var generator = new SitemapGenerator('http://example.com');
 
 // register event listeners
-generator.on('done', function (sitemap) {
-  console.log(sitemap); // => prints xml sitemap
+generator.on('done', function (sitemaps) {
+  console.log(sitemaps); // => array of generated sitemaps
 });
 
 // start the crawler
@@ -36,6 +36,7 @@ You can provide some options to alter the behaviour of the crawler.
 var generator = new SitemapGenerator('http://example.com', {
   restrictToBasepath: false,
   stripQuerystring: true,
+  maxEntriesPerFile: 50000
 });
 ```
 
@@ -54,6 +55,13 @@ Type: `boolean`
 Default: `true`
 
 Whether to treat URL's with query strings like `http://www.example.com/?foo=bar` as indiviual sites and to add them to the sitemap.
+
+### maxEntriesPerFile
+
+Type: `number`  
+Default: `50000`
+
+Google limits the maximal number of URLs in one sitemaps to 50000. If this limit is reached the sitemap-generator creates another sitemap. In that case the first entry of the `sitemaps` array is a sitemapindex file.
 
 ## Events
 
@@ -91,10 +99,10 @@ generator.on('clienterror', function (queueError, errorData) {
 
 ### `done`
 
-Triggered when the crawler finished and the sitemap is created. Passes the created XML markup as callback argument. The second argument provides an object containing found URL's, ignored URL's and faulty URL's.
+Triggered when the crawler finished and the sitemap is created. Passes the created sitemaps as callback argument. The second argument provides an object containing found URL's, ignored URL's and faulty URL's.
 
 ```JavaScript
-generator.on('done', function (sitemap, store) {
+generator.on('done', function (sitemaps, store) {
   // do something with the sitemap, e.g. save as file
 });
 ```

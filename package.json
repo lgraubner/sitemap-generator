@@ -29,6 +29,7 @@
   "dependencies": {
     "cheerio": "^0.22.0",
     "lodash.assign": "^4.0.9",
+    "lodash.chunk": "4.2.0",
     "lodash.forin": "^4.2.0",
     "robots": "^0.9.4",
     "simplecrawler": "1.0.3",
@@ -46,7 +47,9 @@
     "ava": "^0.17.0",
     "eslint": "^3.13.1",
     "eslint-config-graubnla": "^3.0.0",
+    "lodash.isarray": "4.0.0",
     "lodash.isobject": "^3.0.2",
+    "lodash.isstring": "4.0.1",
     "pre-commit": "^1.2.2"
   },
   "scripts": {

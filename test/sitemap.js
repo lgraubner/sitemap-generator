@@ -13,13 +13,13 @@ test.cb('should return valid sitemap', function (t) {
 
   var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''));
 
-  generator.on('done', function (sitemap, store) {
+  generator.on('done', function (sitemaps, store) {
     // sitemap
-    t.regex(sitemap, /^<\?xml version="1.0" encoding="UTF\-8"\?>/, 'has xml header');
+    t.regex(sitemaps[0], /^<\?xml version="1.0" encoding="UTF\-8"\?>/, 'has xml header');
     var urlsRegex = /<urlset xmlns=".+?">(.|\n)+<\/urlset>/;
-    t.regex(sitemap, urlsRegex, 'has urlset property');
-    t.truthy(sitemap.match(/<url>(.|\n)+?<\/url>/g), 'contains url properties');
-    t.truthy(sitemap.match(/<loc>(.|\n)+?<\/loc>/g), 'contains loc properties');
+    t.regex(sitemaps[0], urlsRegex, 'has urlset property');
+    t.truthy(sitemaps[0].match(/<url>(.|\n)+?<\/url>/g), 'contains url properties');
+    t.truthy(sitemaps[0].match(/<loc>(.|\n)+?<\/loc>/g), 'contains loc properties');
 
     t.end();
   });
@@ -31,8 +31,22 @@ test.cb('should return "null" if initital URL not found', function (t) {
   t.plan(1);
 
   var generator = new SitemapGenerator('invalid');
-  generator.on('done', function (sitemap) {
-    t.is(sitemap, null, 'returns "null"');
+  generator.on('done', function (sitemaps) {
+    t.is(sitemaps, null, 'returns "null"');
+    t.end();
+  });
+  generator.start();
+});
+
+test.cb('should create multiple sitemaps', function (t) {
+  t.plan(2);
+
+  var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''), {
+    maxEntriesPerFile: 1,
+  });
+  generator.on('done', function (sitemaps) {
+    t.truthy(sitemaps.length > 1, 'creates more than 1 sitemap');
+    t.regex(sitemaps[0], /sitemapindex/, 'creates sitemapindex file');
     t.end();
   });
   generator.start();

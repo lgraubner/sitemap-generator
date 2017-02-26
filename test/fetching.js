@@ -13,8 +13,8 @@ test.cb('should ignore excluded file types', function (t) {
 
   var generator = new SitemapGenerator(buildUrl(baseUrl, port, ''));
 
-  generator.on('done', function (sitemap, store) {
-    t.regex(sitemap, /[^img.jpg]/, 'does not contain img.jpg');
+  generator.on('done', function (sitemaps, store) {
+    t.regex(sitemaps[0], /[^img.jpg]/, 'does not contain img.jpg');
     t.end();
   });
 
