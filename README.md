@@ -36,7 +36,8 @@ You can provide some options to alter the behaviour of the crawler.
 var generator = new SitemapGenerator('http://example.com', {
   restrictToBasepath: false,
   stripQuerystring: true,
-  maxEntriesPerFile: 50000
+  maxEntriesPerFile: 50000,
+  crawlerMaxDepth: 0,
 });
 ```
 
