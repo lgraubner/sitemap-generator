@@ -63,6 +63,13 @@ Default: `50000`
 
 Google limits the maximum number of URLs in one sitemap to 50000. If this limit is reached the sitemap-generator creates another sitemap. In that case the first entry of the `sitemaps` array is a sitemapindex file.
 
+### crawlerMaxDepth
+
+Type: `number`  
+Default: `0`
+
+Defines a maximum distance from the original request at which resources will be fetched.
+
 ## Events
 
 The Sitemap Generator emits several events using nodes `EventEmitter`.
