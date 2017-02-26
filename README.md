@@ -61,7 +61,7 @@ Whether to treat URL's with query strings like `http://www.example.com/?foo=bar`
 Type: `number`  
 Default: `50000`
 
-Google limits the maximal number of URLs in one sitemaps to 50000. If this limit is reached the sitemap-generator creates another sitemap. In that case the first entry of the `sitemaps` array is a sitemapindex file.
+Google limits the maximum number of URLs in one sitemap to 50000. If this limit is reached the sitemap-generator creates another sitemap. In that case the first entry of the `sitemaps` array is a sitemapindex file.
 
 ## Events
 
