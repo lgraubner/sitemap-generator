@@ -31,8 +31,8 @@
     "lodash.assign": "^4.0.9",
     "lodash.chunk": "4.2.0",
     "lodash.forin": "^4.2.0",
-    "robots": "^0.9.4",
-    "simplecrawler": "1.0.3",
+    "robots": "^0.9.5",
+    "simplecrawler": "1.0.5",
     "xmlbuilder": "^8.2.2"
   },
   "engines": {
@@ -44,8 +44,8 @@
     "lint"
   ],
   "devDependencies": {
-    "ava": "^0.17.0",
-    "eslint": "^3.13.1",
+    "ava": "^0.18.2",
+    "eslint": "^3.16.1",
     "eslint-config-graubnla": "^3.0.0",
     "lodash.isarray": "4.0.0",
     "lodash.isobject": "^3.0.2",
