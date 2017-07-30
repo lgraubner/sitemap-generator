@@ -69,18 +69,26 @@ You can provide some options to alter the behaviour of the crawler.
 
 ```JavaScript
 var generator = new SitemapGenerator('http://example.com', {
-  stripQuerystring: true,
-  maxEntriesPerFile: 50000,
   crawlerMaxDepth: 0,
+  filepath: path.join(process.cwd(), 'sitemap.xml'),
+  maxEntriesPerFile: 50000,
+  stripQuerystring: true
 });
 ```
 
-### stripQueryString
+### crawlerMaxDepth
 
-Type: `boolean`  
-Default: `true`
+Type: `number`  
+Default: `0`
 
-Whether to treat URL's with query strings like `http://www.example.com/?foo=bar` as indiviual sites and add them to the sitemap.
+Defines a maximum distance from the original request at which resources will be fetched.
+
+### filepath
+
+Type: `string`  
+Default: `./sitemap.xml`
+
+Filepath for the new sitemap. If multiple sitemaps are created "part_$index" is appended to each filename.
 
 ### maxEntriesPerFile
 
@@ -89,12 +97,12 @@ Default: `50000`
 
 Google limits the maximum number of URLs in one sitemap to 50000. If this limit is reached the sitemap-generator creates another sitemap. A sitemap index file will be created as well.
 
-### crawlerMaxDepth
+### stripQueryString
 
-Type: `number`  
-Default: `0`
+Type: `boolean`  
+Default: `true`
 
-Defines a maximum distance from the original request at which resources will be fetched.
+Whether to treat URL's with query strings like `http://www.example.com/?foo=bar` as indiviual sites and add them to the sitemap.
 
 ## Events
 
@@ -110,13 +118,13 @@ generator.on('add', (url) => {
 });
 ```
 
-### `ignore`
+### `done`
 
-If an URL matches a disallow rule in the `robots.txt` file or meta robots noindex is present this event is triggered. The URL will not be added to the sitemap. Passes the ignored url as argument.
+Triggered when the crawler finished and the sitemap is created. Passes the created sitemaps as callback argument. The second argument provides an object containing found URL's, ignored URL's and faulty URL's.
 
 ```JavaScript
-generator.on('ignore', (url) => {
-  // log ignored url
+generator.on('done', () => {
+  // sitemaps created
 });
 ```
 
@@ -131,13 +139,13 @@ generator.on('error', (error) {
 });
 ```
 
-### `done`
+### `ignore`
 
-Triggered when the crawler finished and the sitemap is created. Passes the created sitemaps as callback argument. The second argument provides an object containing found URL's, ignored URL's and faulty URL's.
+If an URL matches a disallow rule in the `robots.txt` file or meta robots noindex is present this event is triggered. The URL will not be added to the sitemap. Passes the ignored url as argument.
 
 ```JavaScript
-generator.on('done', () => {
-  // sitemaps created
+generator.on('ignore', (url) => {
+  // log ignored url
 });
 ```
 
