@@ -1,25 +1,46 @@
 # Sitemap Generator
 
-[![Travis](https://img.shields.io/travis/lgraubner/sitemap-generator.svg)](https://travis-ci.org/lgraubner/sitemap-generator) [![David](https://img.shields.io/david/lgraubner/sitemap-generator.svg)](https://david-dm.org/lgraubner/sitemap-generator) [![David Dev](https://img.shields.io/david/dev/lgraubner/sitemap-generator.svg)](https://david-dm.org/lgraubner/sitemap-generator#info=devDependencies) [![npm](https://img.shields.io/npm/v/sitemap-generator-cli.svg)](https://www.npmjs.com/package/sitemap-generator)
+[![Travis](https://img.shields.io/travis/lgraubner/sitemap-generator.svg)](https://travis-ci.org/lgraubner/sitemap-generator) [![David](https://img.shields.io/david/lgraubner/sitemap-generator.svg)](https://david-dm.org/lgraubner/sitemap-generator) [![npm(https://img.shields.io/npm/v/sitemap-generator.svg)](https://www.npmjs.com/package/sitemap-generator)
 
 > Easily create XML sitemaps for your website.
 
-## Installation
+Generates a sitemap by crawling your site. Uses streams to efficiently write the sitemap to your drive and runs asynchronously to avoid blocking the thread. Is cappable of creating multiple sitemaps if threshold is reached. Respects robots.txt and meta tags.
 
-```BASH
+## Table of contents
+
+- [Install](#install)
+- [Usage](#usage)
+- [API](#api)
+- [Options](#options)
+- [Events](#events)
+- [License](#license)
+
+## Install
+
+This module is available on [npm](https://www.npmjs.com/).
+
+```
 $ npm install -S sitemap-generator
+```
+
+This module is running only with Node.js and is not meant to be used in the browser.
+
+```JavaScript
+const SitemapGenerator = require('sitemap-generator');
 ```
 
 ## Usage
 ```JavaScript
-var SitemapGenerator = require('sitemap-generator');
+const Generator = require('sitemap-generator');
 
 // create generator
-var generator = new SitemapGenerator('http://example.com');
+const generator = new SitemapGenerator('http://example.com', {
+  stripQuerystring: false
+});
 
 // register event listeners
-generator.on('done', function (sitemaps) {
-  console.log(sitemaps); // => array of generated sitemaps
+generator.on('done', () {
+  // sitemaps created
 });
 
 // start the crawler
@@ -28,41 +49,45 @@ generator.start();
 
 The crawler will fetch all folder URL pages and file types [parsed by Google](https://support.google.com/webmasters/answer/35287?hl=en). If present the `robots.txt` will be taken into account and possible rules are applied for each URL to consider if it should be added to the sitemap. Also the crawler will not fetch URL's from a page if the robots meta tag with the value `nofollow` is present and ignore them completely if `noindex` rule is present. The crawler is able to apply the `base` value to found links.
 
+## API
+
+### #start()
+
+Starts crawler asynchronously and writes sitemap to disk.
+
+### #stop()
+
+Stops the running crawler and halts the sitemap generation.
+
+### #getStatus()
+
+Returns the status of the generator. Possible values are `waiting`, `started`, `stopped` and `done`.
+
 ## Options
 
 You can provide some options to alter the behaviour of the crawler.
 
 ```JavaScript
 var generator = new SitemapGenerator('http://example.com', {
-  restrictToBasepath: false,
   stripQuerystring: true,
   maxEntriesPerFile: 50000,
   crawlerMaxDepth: 0,
 });
 ```
 
-Since version 5 port is not an option anymore. If you are using the default ports for http/https your are fine. If you are using a custom port just append it to the URL.
-
-### restrictToBasepath
-
-Type: `boolean`  
-Default: `false`
-
-If you specify an URL with a path (e.g. `example.com/foo/`) and this option is set to `true` the crawler will only fetch URL's matching `example.com/foo/*`. Otherwise it could also fetch `example.com` in case a link to this URL is provided.
-
 ### stripQueryString
 
 Type: `boolean`  
 Default: `true`
 
-Whether to treat URL's with query strings like `http://www.example.com/?foo=bar` as indiviual sites and to add them to the sitemap.
+Whether to treat URL's with query strings like `http://www.example.com/?foo=bar` as indiviual sites and add them to the sitemap.
 
 ### maxEntriesPerFile
 
 Type: `number`  
 Default: `50000`
 
-Google limits the maximum number of URLs in one sitemap to 50000. If this limit is reached the sitemap-generator creates another sitemap. In that case the first entry of the `sitemaps` array is a sitemapindex file.
+Google limits the maximum number of URLs in one sitemap to 50000. If this limit is reached the sitemap-generator creates another sitemap. A sitemap index file will be created as well.
 
 ### crawlerMaxDepth
 
@@ -73,35 +98,36 @@ Defines a maximum distance from the original request at which resources will be 
 
 ## Events
 
-The Sitemap Generator emits several events using nodes `EventEmitter`.
+The Sitemap Generator emits several events which can be listened to.
 
-### `fetch`
+### `add`
 
-Triggered when the crawler tries to fetch a resource. Passes the status and the url as arguments. The status can be any HTTP status.
+Triggered when the crawler successfully added a resource to the sitemap. Passes the url as argument.
 
 ```JavaScript
-generator.on('fetch', function (status, url) {
+generator.on('add', (url) => {
   // log url
 });
 ```
 
 ### `ignore`
 
-If an URL matches a disallow rule in the `robots.txt` file this event is triggered. The URL will not be added to the sitemap. Passes the ignored url as argument.
+If an URL matches a disallow rule in the `robots.txt` file or meta robots noindex is present this event is triggered. The URL will not be added to the sitemap. Passes the ignored url as argument.
 
 ```JavaScript
-generator.on('ignore', function (url) {
+generator.on('ignore', (url) => {
   // log ignored url
 });
 ```
 
-### `clienterror`
+### `error`
 
-Thrown if there was an error on client side while fetching an URL. Passes the crawler error and additional error data as arguments.
+Thrown if there was an error while fetching an URL. Passes an object with the http status code, a message and the url as argument.
 
 ```JavaScript
-generator.on('clienterror', function (queueError, errorData) {
-  // log error
+generator.on('error', (error) {
+  console.log(error);
+  // => { code: 404, message: 'Not found.', url: 'http://example.com/foo' }
 });
 ```
 
@@ -110,7 +136,11 @@ generator.on('clienterror', function (queueError, errorData) {
 Triggered when the crawler finished and the sitemap is created. Passes the created sitemaps as callback argument. The second argument provides an object containing found URL's, ignored URL's and faulty URL's.
 
 ```JavaScript
-generator.on('done', function (sitemaps, store) {
-  // do something with the sitemaps, e.g. save as file
+generator.on('done', () => {
+  // sitemaps created
 });
 ```
+
+## License
+
+[MIT](https://github.com/lgraubner/sitemap-generator/blob/master/LICENSE) © [Lars Graubner](https://larsgraubner.com)
