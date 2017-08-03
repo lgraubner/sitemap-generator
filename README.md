@@ -34,7 +34,7 @@ const SitemapGenerator = require('sitemap-generator');
 const Generator = require('sitemap-generator');
 
 // create generator
-const generator = new SitemapGenerator('http://example.com', {
+const generator = SitemapGenerator('http://example.com', {
   stripQuerystring: false
 });
 
