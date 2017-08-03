@@ -51,15 +51,17 @@ The crawler will fetch all folder URL pages and file types [parsed by Google](ht
 
 ## API
 
-### #start()
+The generator offers straightforward methods to start and stop it. Also `getStatus` offers a way to get the current status as the crawler runs asynchronous.
+
+### start
 
 Starts crawler asynchronously and writes sitemap to disk.
 
-### #stop()
+### stop
 
 Stops the running crawler and halts the sitemap generation.
 
-### #getStatus()
+### getStatus
 
 Returns the status of the generator. Possible values are `waiting`, `started`, `stopped` and `done`.
 
@@ -68,7 +70,7 @@ Returns the status of the generator. Possible values are `waiting`, `started`, `
 You can provide some options to alter the behaviour of the crawler.
 
 ```JavaScript
-var generator = new SitemapGenerator('http://example.com', {
+var generator = SitemapGenerator('http://example.com', {
   crawlerMaxDepth: 0,
   filepath: path.join(process.cwd(), 'sitemap.xml'),
   maxEntriesPerFile: 50000,
