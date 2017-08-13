@@ -51,19 +51,35 @@ The crawler will fetch all folder URL pages and file types [parsed by Google](ht
 
 ## API
 
-The generator offers straightforward methods to start and stop it. Also `getStatus` offers a way to get the current status as the crawler runs asynchronous.
+The generator offers straightforward methods to start and stop it. You can also query some information about status and output.
 
-### start
+### getPaths()
+
+Returns array of paths to generated sitemaps. Empty until the crawler is done.
+
+### getStats()
+
+Returns object with info about fetched URL's. Get's updated live during crawling process.
+
+```JavaScript
+{
+  added: 0,
+  ignored: 0,
+  errored: 0
+}
+```
+
+### getStatus()
+
+Returns the status of the generator. Possible values are `waiting`, `started`, `stopped` and `done`.
+
+### start()
 
 Starts crawler asynchronously and writes sitemap to disk.
 
-### stop
+### stop()
 
 Stops the running crawler and halts the sitemap generation.
-
-### getStatus
-
-Returns the status of the generator. Possible values are `waiting`, `started`, `stopped` and `done`.
 
 ## Options
 
@@ -122,10 +138,10 @@ generator.on('add', (url) => {
 
 ### `done`
 
-Triggered when the crawler finished and the sitemap is created. Passes the created sitemaps as callback argument. The second argument provides an object containing found URL's, ignored URL's and faulty URL's.
+Triggered when the crawler finished and the sitemap is created. Provides statistics as first argument. Stats are the same as from `getStats`.
 
 ```JavaScript
-generator.on('done', () => {
+generator.on('done', (stats) => {
   // sitemaps created
 });
 ```
