@@ -31,7 +31,7 @@ const SitemapGenerator = require('sitemap-generator');
 
 ## Usage
 ```JavaScript
-const Generator = require('sitemap-generator');
+const SitemapGenerator = require('sitemap-generator');
 
 // create generator
 const generator = SitemapGenerator('http://example.com', {
@@ -39,7 +39,7 @@ const generator = SitemapGenerator('http://example.com', {
 });
 
 // register event listeners
-generator.on('done', () {
+generator.on('done', () => {
   // sitemaps created
 });
 
