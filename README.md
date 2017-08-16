@@ -31,7 +31,7 @@ const SitemapGenerator = require('sitemap-generator');
 
 ## Usage
 ```JavaScript
-const Generator = require('sitemap-generator');
+const SitemapGenerator = require('sitemap-generator');
 
 // create generator
 const generator = SitemapGenerator('http://example.com', {
@@ -39,7 +39,7 @@ const generator = SitemapGenerator('http://example.com', {
 });
 
 // register event listeners
-generator.on('done', () {
+generator.on('done', () => {
   // sitemaps created
 });
 
@@ -151,7 +151,7 @@ generator.on('done', (stats) => {
 Thrown if there was an error while fetching an URL. Passes an object with the http status code, a message and the url as argument.
 
 ```JavaScript
-generator.on('error', (error) {
+generator.on('error', (error) => {
   console.log(error);
   // => { code: 404, message: 'Not found.', url: 'http://example.com/foo' }
 });
