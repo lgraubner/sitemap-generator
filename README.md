@@ -122,6 +122,13 @@ Default: `true`
 
 Whether to treat URL's with query strings like `http://www.example.com/?foo=bar` as indiviual sites and add them to the sitemap.
 
+### userAgent
+
+Type: `string`  
+Default: `Node/SitemapGenerator`
+
+Set the User Agent used by the crawler.
+
 ## Events
 
 The Sitemap Generator emits several events which can be listened to.
