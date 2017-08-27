@@ -30,6 +30,7 @@
     "async": "^2.5.0",
     "babel-eslint": "^7.2.3",
     "cheerio": "^1.0.0-rc.2",
+    "cp-file": "^4.2.0",
     "crypto-random-string": "^1.0.0",
     "mitt": "^1.1.2",
     "simplecrawler": "^1.1.5",
