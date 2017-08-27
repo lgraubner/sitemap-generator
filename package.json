@@ -57,7 +57,6 @@
     "lodash.isarray": "4.0.0",
     "lodash.isobject": "^3.0.2",
     "lodash.isstring": "4.0.1",
-    "pre-commit": "^1.2.2",
     "prettier": "^1.5.3"
   },
   "scripts": {
@@ -67,7 +66,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "eslint",
+      "eslint --fix",
       "prettier --single-quote --trailing-comma es5 --write",
       "git add"
     ]
