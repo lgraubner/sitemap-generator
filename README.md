@@ -108,6 +108,20 @@ Default: `./sitemap.xml`
 
 Filepath for the new sitemap. If multiple sitemaps are created "part_$index" is appended to each filename.
 
+### httpAgent
+
+Type: `HTTPAgent`
+Default: `http.globalAgent`
+
+Controls what HTTP agent to use. This is useful if you want configure HTTP connection through a HTTP/HTTPS proxy (see [http-proxy-agent](https://www.npmjs.com/package/http-proxy-agent)).
+
+### httpsAgent
+
+Type: `HTTPAgent`
+Default: `https.globalAgent`
+
+Controls what HTTPS agent to use. This is useful if you want configure HTTPS connection through a HTTP/HTTPS proxy (see [https-proxy-agent](https://www.npmjs.com/package/https-proxy-agent)).
+
 ### maxEntriesPerFile
 
 Type: `number`  
