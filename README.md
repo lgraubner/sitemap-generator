@@ -81,6 +81,10 @@ Starts crawler asynchronously and writes sitemap to disk.
 
 Stops the running crawler and halts the sitemap generation.
 
+### queueURL(url)
+
+Add a URL to crawler's queue. Useful to help crawler fetch pages it can't find itself. 
+
 ## Options
 
 You can provide some options to alter the behaviour of the crawler.
@@ -110,14 +114,14 @@ Filepath for the new sitemap. If multiple sitemaps are created "part_$index" is 
 
 ### httpAgent
 
-Type: `HTTPAgent`
+Type: `HTTPAgent`  
 Default: `http.globalAgent`
 
 Controls what HTTP agent to use. This is useful if you want configure HTTP connection through a HTTP/HTTPS proxy (see [http-proxy-agent](https://www.npmjs.com/package/http-proxy-agent)).
 
 ### httpsAgent
 
-Type: `HTTPAgent`
+Type: `HTTPAgent`  
 Default: `https.globalAgent`
 
 Controls what HTTPS agent to use. This is useful if you want configure HTTPS connection through a HTTP/HTTPS proxy (see [https-proxy-agent](https://www.npmjs.com/package/https-proxy-agent)).
