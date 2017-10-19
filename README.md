@@ -98,6 +98,20 @@ var generator = SitemapGenerator('http://example.com', {
 });
 ```
 
+### authUser
+
+Type: `string`  
+Default: `undefined`
+
+Provides an username for basic authentication. Requires `authPass` option.
+
+### authPass
+
+Type: `string`  
+Default: `undefined`
+
+Password for basic authentication. Has to be used with `authUser` option.
+
 ### crawlerMaxDepth
 
 Type: `number`  
