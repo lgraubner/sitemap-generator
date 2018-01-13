@@ -140,6 +140,13 @@ Default: `https.globalAgent`
 
 Controls what HTTPS agent to use. This is useful if you want configure HTTPS connection through a HTTP/HTTPS proxy (see [https-proxy-agent](https://www.npmjs.com/package/https-proxy-agent)).
 
+### maxConcurrency
+
+Type: `number`  
+Default: `5`
+
+The maximum number of requests the crawler will run simultaneously.
+
 ### maxEntriesPerFile
 
 Type: `number`  
