@@ -163,7 +163,7 @@ Set the User Agent used by the crawler.
 
 ### timeout
 
-Type: `number`
+Type: `number`  
 Default: `300000`
 
 The maximum time in miliseconds before continuing to gather url's 
