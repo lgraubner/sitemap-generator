@@ -161,6 +161,13 @@ Default: `Node/SitemapGenerator`
 
 Set the User Agent used by the crawler.
 
+### timeout
+
+Type: `number`  
+Default: `300000`
+
+The maximum time in miliseconds before continuing to gather url's 
+
 ## Events
 
 The Sitemap Generator emits several events which can be listened to.
