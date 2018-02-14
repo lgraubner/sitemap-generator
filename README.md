@@ -83,7 +83,7 @@ Stops the running crawler and halts the sitemap generation.
 
 ### queueURL(url)
 
-Add a URL to crawler's queue. Useful to help crawler fetch pages it can't find itself. 
+Add a URL to crawler's queue. Useful to help crawler fetch pages it can't find itself.
 
 ## Options
 
@@ -111,6 +111,13 @@ Type: `string`
 Default: `undefined`
 
 Password for basic authentication. Has to be used with `authUser` option.
+
+### changeFreq
+
+Type: `string`  
+Default: `undefined`
+
+If defined, adds a `<changefreq>` line to each URL in the sitemap. Possible values are `always`, `hourly`, `daily`, `weekly`, `monthly`, `yearly`, `never`. All other values are ignored.
 
 ### crawlerMaxDepth
 
@@ -140,12 +147,26 @@ Default: `https.globalAgent`
 
 Controls what HTTPS agent to use. This is useful if you want configure HTTPS connection through a HTTP/HTTPS proxy (see [https-proxy-agent](https://www.npmjs.com/package/https-proxy-agent)).
 
+### lastMod
+
+Type: `boolean`  
+Default: `false`
+
+Whether to add a `<lastmod>` line to each URL in the sitemap, and fill it with today's date.
+
 ### maxEntriesPerFile
 
 Type: `number`  
 Default: `50000`
 
 Google limits the maximum number of URLs in one sitemap to 50000. If this limit is reached the sitemap-generator creates another sitemap. A sitemap index file will be created as well.
+
+### priorityMap
+
+Type: `array`  
+Default: `[]`
+
+If provided, adds a `<priority>` line to each URL in the sitemap. Each value in priorityMap array corresponds with the depth of the URL being added. For example, the priority value given to a URL equals `priorityMap[depth - 1]`. If a URL's depth is greater than the length of the priorityMap array, the last value in the array will be used. Valid values are between `1.0` and `0.0`.
 
 ### stripQueryString
 
@@ -166,7 +187,7 @@ Set the User Agent used by the crawler.
 Type: `number`  
 Default: `300000`
 
-The maximum time in miliseconds before continuing to gather url's 
+The maximum time in miliseconds before continuing to gather url's
 
 ## Events
 
