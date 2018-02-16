@@ -32,7 +32,7 @@ module.exports = function SitemapGenerator(uri, opts) {
   };
 
   if (!uri) {
-    throw new Error('Requires an valid URL.');
+    throw new Error('Requires a valid URL.');
   }
 
   const options = Object.assign({}, defaultOpts, opts);
