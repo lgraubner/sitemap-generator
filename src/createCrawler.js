@@ -1,6 +1,6 @@
 const Crawler = require('simplecrawler');
+const has = require('lodash/has');
 
-const discoverResources = require('./discoverResources');
 const stringifyURL = require('./helpers/stringifyURL');
 
 module.exports = (uri, options = {}) => {
@@ -37,31 +37,26 @@ module.exports = (uri, options = {}) => {
 
   const crawler = new Crawler(uri.href);
 
+  Object.keys(options).forEach(o => {
+    if (has(crawler, o)) {
+      crawler[o] = options[o];
+    } else if (o === 'crawlerMaxDepth') {
+      // eslint-disable-next-line
+      console.warn(
+        'Option "crawlerMaxDepth" is deprecated. Please use "maxDepth".'
+      );
+      if (!options.maxDepth) {
+        crawler.maxDepth = options.crawlerMaxDepth;
+      }
+    }
+  });
+
   // set crawler options
   // see https://github.com/cgiffard/node-simplecrawler#configuration
   crawler.initialPath = uri.pathname !== '' ? uri.pathname : '/';
-  crawler.maxDepth = options.crawlerMaxDepth;
-  crawler.decodeResponses = true;
-  crawler.respectRobotsTxt = true;
   crawler.initialProtocol = uri.protocol.replace(':', '');
-  crawler.userAgent = options.userAgent;
-  // we don't care about invalid certs
-  crawler.ignoreInvalidSSL = true;
 
-  if (options.httpAgent) crawler.httpAgent = options.httpAgent;
-  if (options.httpsAgent) crawler.httpsAgent = options.httpsAgent;
-  if (options.timeout) crawler.timeout = options.timeout;
-
-  // pass query string handling option to crawler
-  crawler.stripQuerystring = options.stripQuerystring;
-
-  if (options.authUser && options.authPass) {
-    crawler.needsAuth = true;
-    crawler.authUser = options.authUser;
-    crawler.authPass = options.authPass;
-  }
-
-  // restrict to subpages if path is privided
+  // restrict to subpages if path is provided
   crawler.addFetchCondition(parsedUrl => {
     const initialURLRegex = new RegExp(`${uri.pathname}.*`);
     return stringifyURL(parsedUrl).match(initialURLRegex);
@@ -69,9 +64,6 @@ module.exports = (uri, options = {}) => {
 
   // file type exclusion
   crawler.addFetchCondition(parsedUrl => !parsedUrl.path.match(extRegex));
-
-  // custom discover function
-  crawler.discoverResources = discoverResources;
 
   return crawler;
 };

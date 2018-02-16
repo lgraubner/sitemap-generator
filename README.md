@@ -25,11 +25,8 @@ $ npm install -S sitemap-generator
 
 This module is running only with Node.js and is not meant to be used in the browser.
 
-```JavaScript
-const SitemapGenerator = require('sitemap-generator');
-```
-
 ## Usage
+
 ```JavaScript
 const SitemapGenerator = require('sitemap-generator');
 
@@ -51,27 +48,7 @@ The crawler will fetch all folder URL pages and file types [parsed by Google](ht
 
 ## API
 
-The generator offers straightforward methods to start and stop it. You can also query some information about status and output.
-
-### getPaths()
-
-Returns array of paths to generated sitemaps. Empty until the crawler is done.
-
-### getStats()
-
-Returns object with info about fetched URL's. Get's updated live during crawling process.
-
-```JavaScript
-{
-  added: 0,
-  ignored: 0,
-  errored: 0
-}
-```
-
-### getStatus()
-
-Returns the status of the generator. Possible values are `waiting`, `started`, `stopped` and `done`.
+The generator offers straightforward methods to start and stop it. You can also add URL's manually.
 
 ### start()
 
@@ -87,30 +64,16 @@ Add a URL to crawler's queue. Useful to help crawler fetch pages it can't find i
 
 ## Options
 
-You can provide some options to alter the behaviour of the crawler.
+There are a couple of options to adjust the sitemap output. In addition to the options beneath the options of the used crawler can be changed. For a complete list please check it's [official documentation](https://github.com/simplecrawler/simplecrawler#configuration).
 
 ```JavaScript
 var generator = SitemapGenerator('http://example.com', {
-  crawlerMaxDepth: 0,
+  maxDepth: 0,
   filepath: path.join(process.cwd(), 'sitemap.xml'),
   maxEntriesPerFile: 50000,
   stripQuerystring: true
 });
 ```
-
-### authUser
-
-Type: `string`  
-Default: `undefined`
-
-Provides an username for basic authentication. Requires `authPass` option.
-
-### authPass
-
-Type: `string`  
-Default: `undefined`
-
-Password for basic authentication. Has to be used with `authUser` option.
 
 ### changeFreq
 
@@ -118,13 +81,6 @@ Type: `string`
 Default: `undefined`
 
 If defined, adds a `<changefreq>` line to each URL in the sitemap. Possible values are `always`, `hourly`, `daily`, `weekly`, `monthly`, `yearly`, `never`. All other values are ignored.
-
-### crawlerMaxDepth
-
-Type: `number`  
-Default: `0`
-
-Defines a maximum distance from the original request at which resources will be fetched.
 
 ### filepath
 
@@ -168,27 +124,6 @@ Default: `[]`
 
 If provided, adds a `<priority>` line to each URL in the sitemap. Each value in priorityMap array corresponds with the depth of the URL being added. For example, the priority value given to a URL equals `priorityMap[depth - 1]`. If a URL's depth is greater than the length of the priorityMap array, the last value in the array will be used. Valid values are between `1.0` and `0.0`.
 
-### stripQueryString
-
-Type: `boolean`  
-Default: `true`
-
-Whether to treat URL's with query strings like `http://www.example.com/?foo=bar` as indiviual sites and add them to the sitemap.
-
-### userAgent
-
-Type: `string`  
-Default: `Node/SitemapGenerator`
-
-Set the User Agent used by the crawler.
-
-### timeout
-
-Type: `number`  
-Default: `300000`
-
-The maximum time in miliseconds before continuing to gather url's
-
 ## Events
 
 The Sitemap Generator emits several events which can be listened to.
@@ -205,10 +140,10 @@ generator.on('add', (url) => {
 
 ### `done`
 
-Triggered when the crawler finished and the sitemap is created. Provides statistics as first argument. Stats are the same as from `getStats`.
+Triggered when the crawler finished and the sitemap is created.
 
 ```JavaScript
-generator.on('done', (stats) => {
+generator.on('done', () => {
   // sitemaps created
 });
 ```

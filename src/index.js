@@ -2,79 +2,60 @@ const fs = require('fs');
 const http = require('http');
 const path = require('path');
 const parseURL = require('url-parse');
-const each = require('async/each');
+const eachSeries = require('async/eachSeries');
 const cpFile = require('cp-file');
+const normalizeUrl = require('normalize-url');
+const mitt = require('mitt');
 
 const createCrawler = require('./createCrawler');
 const SitemapRotator = require('./SitemapRotator');
 const createSitemapIndex = require('./createSitemapIndex');
 const extendFilename = require('./helpers/extendFilename');
 const validChangeFreq = require('./helpers/validChangeFreq');
-const Logger = require('./Logger');
+const discoverResources = require('./discoverResources');
 
 module.exports = function SitemapGenerator(uri, opts) {
   const defaultOpts = {
     stripQuerystring: true,
     maxEntriesPerFile: 50000,
-    crawlerMaxDepth: 0,
+    maxDepth: 0,
     filepath: path.join(process.cwd(), 'sitemap.xml'),
     userAgent: 'Node/SitemapGenerator',
+    respectRobotsTxt: true,
+    ignoreInvalidSSL: true,
+    timeout: 30000,
+    discoverResources,
+    decodeResponses: true,
     lastMod: false,
     changeFreq: '',
     priorityMap: [],
   };
 
+  if (!uri) {
+    throw new Error('Requires an valid URL.');
+  }
+
   const options = Object.assign({}, defaultOpts, opts);
 
   // if changeFreq option was passed, check to see if the value is valid
-  if (opts && opts.changeFreq)
+  if (opts && opts.changeFreq) {
     options.changeFreq = validChangeFreq(opts.changeFreq);
-
-  const { log, on, off, stats } = Logger();
-
-  let status = 'waiting';
-
-  const setStatus = newStatus => {
-    status = newStatus;
-  };
-
-  const getStatus = () => status;
-
-  const getStats = () => ({
-    added: stats.add || 0,
-    ignored: stats.ignore || 0,
-    errored: stats.error || 0,
-  });
-
-  const paths = [];
-
-  const getPaths = () => paths;
-
-  const parsedUrl = parseURL(uri);
-  const sitemapPath = path.resolve(options.filepath);
-
-  if (parsedUrl.protocol === '') {
-    throw new TypeError('Invalid URL.');
   }
+
+  const emitter = mitt();
+
+  const parsedUrl = parseURL(
+    normalizeUrl(uri, {
+      stripWWW: false,
+      removeTrailingSlash: false,
+    })
+  );
+  const sitemapPath = path.resolve(options.filepath);
 
   // we don't care about invalid certs
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
   const crawler = createCrawler(parsedUrl, options);
-
-  const start = () => {
-    setStatus('started');
-    crawler.start();
-  };
-
-  const stop = () => {
-    setStatus('stopped');
-    crawler.stop();
-  };
-
-  const queueURL = url => {
-    crawler.queueURL(url, undefined, false);
-  };
 
   // create sitemap stream
   const sitemap = SitemapRotator(
@@ -84,39 +65,39 @@ module.exports = function SitemapGenerator(uri, opts) {
     options.priorityMap
   );
 
-  const logError = (code, url) => {
-    log('error', {
+  const emitError = (code, url) => {
+    emitter.emit('error', {
       code,
       message: http.STATUS_CODES[code],
       url,
     });
   };
 
-  crawler.on('fetch404', ({ url }) => logError(404, url));
-  crawler.on('fetchtimeout', ({ url }) => logError(408, url));
-  crawler.on('fetch410', ({ url }) => logError(410, url));
+  crawler.on('fetch404', ({ url }) => emitError(404, url));
+  crawler.on('fetchtimeout', ({ url }) => emitError(408, url));
+  crawler.on('fetch410', ({ url }) => emitError(410, url));
   crawler.on('fetcherror', (queueItem, response) =>
-    logError(response.statusCode, queueItem.url)
+    emitError(response.statusCode, queueItem.url)
   );
 
   crawler.on('fetchclienterror', (queueError, errorData) => {
     if (errorData.code === 'ENOTFOUND') {
       throw new Error(`Site "${parsedUrl.href}" could not be found.`);
     } else {
-      logError(400, errorData.message);
+      emitError(400, errorData.message);
     }
   });
 
-  crawler.on('fetchdisallowed', ({ url }) => log('ignore', url));
+  crawler.on('fetchdisallowed', ({ url }) => emitter.emit('ignore', url));
 
   // fetch complete event
   crawler.on('fetchcomplete', (queueItem, page) => {
     const { url, depth } = queueItem;
     // check if robots noindex is present
     if (/<meta(?=[^>]+noindex).*?>/.test(page)) {
-      log('ignore', url);
+      emitter.emit('ignore', url);
     } else {
-      log('add', url);
+      emitter.emit('add', url);
       sitemap.addURL(url, depth);
     }
   });
@@ -126,20 +107,16 @@ module.exports = function SitemapGenerator(uri, opts) {
 
     const sitemaps = sitemap.getPaths();
 
-    const cb = () => {
-      setStatus('done');
-      log('done', getStats());
-    };
+    const cb = () => emitter.emit('done');
 
     // move files
     if (sitemaps.length > 1) {
       // multiple sitemaps
       let count = 1;
-      each(
+      eachSeries(
         sitemaps,
         (tmpPath, done) => {
           const newPath = extendFilename(sitemapPath, `_part${count}`);
-          paths.push(newPath);
 
           // copy and remove tmp file
           cpFile(tmpPath, newPath).then(() => {
@@ -151,7 +128,6 @@ module.exports = function SitemapGenerator(uri, opts) {
           count += 1;
         },
         () => {
-          paths.unshift(sitemapPath);
           const filename = path.basename(sitemapPath);
           fs.writeFile(
             sitemapPath,
@@ -161,7 +137,6 @@ module.exports = function SitemapGenerator(uri, opts) {
         }
       );
     } else if (sitemaps.length) {
-      paths.unshift(sitemapPath);
       cpFile(sitemaps[0], sitemapPath).then(() => {
         fs.unlink(sitemaps[0], cb);
       });
@@ -171,13 +146,12 @@ module.exports = function SitemapGenerator(uri, opts) {
   });
 
   return {
-    getPaths,
-    getStats,
-    getStatus,
-    start,
-    stop,
-    queueURL,
-    on,
-    off,
+    start: () => crawler.start(),
+    stop: () => crawler.stop(),
+    queueURL: url => {
+      crawler.queueURL(url, undefined, false);
+    },
+    on: emitter.on,
+    off: emitter.off,
   };
 };

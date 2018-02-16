@@ -19,11 +19,15 @@ module.exports = function SitemapStream() {
     const escapedUrl = escapeUnsafe(url);
     stream.write('\n  <url>\n');
     stream.write(`    <loc>${escapedUrl}</loc>\n`);
-    if (currentDateTime)
+    if (currentDateTime) {
       stream.write(`    <lastmod>${currentDateTime}</lastmod>\n`);
-    if (changeFreq)
+    }
+    if (changeFreq) {
       stream.write(`    <changefreq>${changeFreq}</changefreq>\n`);
-    if (priority) stream.write(`    <priority>${priority}</priority>\n`);
+    }
+    if (priority) {
+      stream.write(`    <priority>${priority}</priority>\n`);
+    }
     stream.write('  </url>');
   };
 
