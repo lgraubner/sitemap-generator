@@ -28,7 +28,7 @@ module.exports = function SitemapGenerator(uri, opts) {
     decodeResponses: true,
     lastMod: false,
     changeFreq: '',
-    priorityMap: [],
+    priorityMap: []
   };
 
   if (!uri) {
@@ -47,7 +47,7 @@ module.exports = function SitemapGenerator(uri, opts) {
   const parsedUrl = parseURL(
     normalizeUrl(uri, {
       stripWWW: false,
-      removeTrailingSlash: false,
+      removeTrailingSlash: false
     })
   );
   const sitemapPath = path.resolve(options.filepath);
@@ -69,7 +69,7 @@ module.exports = function SitemapGenerator(uri, opts) {
     emitter.emit('error', {
       code,
       message: http.STATUS_CODES[code],
-      url,
+      url
     });
   };
 
@@ -152,6 +152,6 @@ module.exports = function SitemapGenerator(uri, opts) {
       crawler.queueURL(url, undefined, false);
     },
     on: emitter.on,
-    off: emitter.off,
+    off: emitter.off
   };
 };
