@@ -12,7 +12,6 @@ const SitemapRotator = require('./SitemapRotator');
 const createSitemapIndex = require('./createSitemapIndex');
 const extendFilename = require('./helpers/extendFilename');
 const validChangeFreq = require('./helpers/validChangeFreq');
-const discoverResources = require('./discoverResources');
 
 module.exports = function SitemapGenerator(uri, opts) {
   const defaultOpts = {
@@ -24,7 +23,6 @@ module.exports = function SitemapGenerator(uri, opts) {
     respectRobotsTxt: true,
     ignoreInvalidSSL: true,
     timeout: 30000,
-    discoverResources,
     decodeResponses: true,
     lastMod: false,
     changeFreq: '',
