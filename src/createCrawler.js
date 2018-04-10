@@ -60,6 +60,12 @@ module.exports = (uri, options = {}) => {
   crawler.initialPath = uri.pathname !== '' ? uri.pathname : '/';
   crawler.initialProtocol = uri.protocol.replace(':', '');
 
+  //Basic Http Authentication. format: user:pass
+  if (options.auth) {
+    crawler.needsAuth = true;
+    crawler.authUser = options.auth.split(':')[0];
+    crawler.authPass = options.auth.split(':')[1];
+  }
   // restrict to subpages if path is provided
   crawler.addFetchCondition(parsedUrl => {
     const initialURLRegex = new RegExp(`${uri.pathname}.*`);
