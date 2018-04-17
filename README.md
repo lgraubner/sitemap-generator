@@ -58,6 +58,10 @@ Starts crawler asynchronously and writes sitemap to disk.
 
 Stops the running crawler and halts the sitemap generation.
 
+### getCrawler()
+
+Returns the crawler instance. For more information about the crawler check the [simplecrawler docs](https://github.com/simplecrawler/simplecrawler#readme).
+
 ### queueURL(url)
 
 Add a URL to crawler's queue. Useful to help crawler fetch pages it can't find itself.
