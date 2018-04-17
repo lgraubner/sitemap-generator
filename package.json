@@ -1,6 +1,6 @@
 {
   "name": "sitemap-generator",
-  "version": "8.0.1",
+  "version": "8.1.0",
   "description": "Easily create XML sitemaps for your website.",
   "homepage": "https://github.com/lgraubner/sitemap-generator",
   "author": "Lars Graubner <mail@larsgraubner.de> (https://larsgraubner.com)",
