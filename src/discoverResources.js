@@ -13,10 +13,6 @@ module.exports = (buffer, queueItem) => {
   const links = $('a[href]').map(function iteratee() {
     let href = $(this).attr('href');
 
-    if (/sitemap\.xml$/.test(href)) {
-      return null;
-    }
-
     // exclude "mailto:" etc
     if (/^[a-z]+:(?!\/\/)/i.test(href)) {
       return null;

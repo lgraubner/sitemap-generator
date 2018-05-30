@@ -6,6 +6,7 @@ const eachSeries = require('async/eachSeries');
 const cpFile = require('cp-file');
 const normalizeUrl = require('normalize-url');
 const mitt = require('mitt');
+const format = require('date-fns/format');
 
 const createCrawler = require('./createCrawler');
 const SitemapRotator = require('./SitemapRotator');
@@ -100,7 +101,9 @@ module.exports = function SitemapGenerator(uri, opts) {
       emitter.emit('add', url);
 
       if (sitemapPath !== null) {
-        sitemap.addURL(url, depth);
+        // eslint-disable-next-line
+        const lastMod = queueItem.stateData.headers['last-modified'];
+        sitemap.addURL(url, depth, lastMod && format(lastMod, 'YYYY-MM-DD'));
       }
     }
   });

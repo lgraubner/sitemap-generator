@@ -112,7 +112,7 @@ Controls what HTTPS agent to use. This is useful if you want configure HTTPS con
 Type: `boolean`  
 Default: `false`
 
-Whether to add a `<lastmod>` line to each URL in the sitemap, and fill it with today's date.
+Whether to add a `<lastmod>` line to each URL in the sitemap. If present the responses `Last-Modified` header will be used. Otherwise todays date is added.
 
 ### maxEntriesPerFile
 
