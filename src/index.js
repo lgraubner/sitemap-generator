@@ -48,7 +48,9 @@ module.exports = function SitemapGenerator(uri, opts) {
       removeTrailingSlash: false
     })
   );
-  const sitemapPath = path.resolve(options.filepath);
+
+  // only resolve if sitemap path is truthy (a string preferably)
+  const sitemapPath = options.filepath && path.resolve(options.filepath);
 
   // we don't care about invalid certs
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -96,7 +98,10 @@ module.exports = function SitemapGenerator(uri, opts) {
       emitter.emit('ignore', url);
     } else {
       emitter.emit('add', url);
-      sitemap.addURL(url, depth);
+
+      if (sitemapPath !== null) {
+        sitemap.addURL(url, depth);
+      }
     }
   });
 
@@ -107,37 +112,45 @@ module.exports = function SitemapGenerator(uri, opts) {
 
     const cb = () => emitter.emit('done');
 
-    // move files
-    if (sitemaps.length > 1) {
-      // multiple sitemaps
-      let count = 1;
-      eachSeries(
-        sitemaps,
-        (tmpPath, done) => {
-          const newPath = extendFilename(sitemapPath, `_part${count}`);
+    if (sitemapPath !== null) {
+      // move files
+      if (sitemaps.length > 1) {
+        // multiple sitemaps
+        let count = 1;
+        eachSeries(
+          sitemaps,
+          (tmpPath, done) => {
+            const newPath = extendFilename(sitemapPath, `_part${count}`);
 
-          // copy and remove tmp file
-          cpFile(tmpPath, newPath).then(() => {
-            fs.unlink(tmpPath, () => {
-              done();
+            // copy and remove tmp file
+            cpFile(tmpPath, newPath).then(() => {
+              fs.unlink(tmpPath, () => {
+                done();
+              });
             });
-          });
 
-          count += 1;
-        },
-        () => {
-          const filename = path.basename(sitemapPath);
-          fs.writeFile(
-            sitemapPath,
-            createSitemapIndex(parsedUrl.toString(), filename, sitemaps.length),
-            cb
-          );
-        }
-      );
-    } else if (sitemaps.length) {
-      cpFile(sitemaps[0], sitemapPath).then(() => {
-        fs.unlink(sitemaps[0], cb);
-      });
+            count += 1;
+          },
+          () => {
+            const filename = path.basename(sitemapPath);
+            fs.writeFile(
+              sitemapPath,
+              createSitemapIndex(
+                parsedUrl.toString(),
+                filename,
+                sitemaps.length
+              ),
+              cb
+            );
+          }
+        );
+      } else if (sitemaps.length) {
+        cpFile(sitemaps[0], sitemapPath).then(() => {
+          fs.unlink(sitemaps[0], cb);
+        });
+      } else {
+        cb();
+      }
     } else {
       cb();
     }

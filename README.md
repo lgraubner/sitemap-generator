@@ -73,7 +73,7 @@ There are a couple of options to adjust the sitemap output. In addition to the o
 ```JavaScript
 var generator = SitemapGenerator('http://example.com', {
   maxDepth: 0,
-  filepath: path.join(process.cwd(), 'sitemap.xml'),
+  filepath: './sitemap.xml',
   maxEntriesPerFile: 50000,
   stripQuerystring: true
 });
@@ -91,7 +91,7 @@ If defined, adds a `<changefreq>` line to each URL in the sitemap. Possible valu
 Type: `string`  
 Default: `./sitemap.xml`
 
-Filepath for the new sitemap. If multiple sitemaps are created "part_$index" is appended to each filename.
+Filepath for the new sitemap. If multiple sitemaps are created "part_$index" is appended to each filename. If you don't want to write a file at all you can pass `null` as filepath.
 
 ### httpAgent
 
