@@ -107,6 +107,13 @@ Default: `https.globalAgent`
 
 Controls what HTTPS agent to use. This is useful if you want configure HTTPS connection through a HTTP/HTTPS proxy (see [https-proxy-agent](https://www.npmjs.com/package/https-proxy-agent)).
 
+### ignoreAMP
+
+Type: `boolean`  
+Default: `true`
+
+Indicates whether [Google AMP pages](https://www.ampproject.org/) should be ignored and not be added to the sitemap.
+
 ### lastMod
 
 Type: `boolean`  

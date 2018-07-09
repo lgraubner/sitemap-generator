@@ -27,7 +27,8 @@ module.exports = function SitemapGenerator(uri, opts) {
     decodeResponses: true,
     lastMod: false,
     changeFreq: '',
-    priorityMap: []
+    priorityMap: [],
+    ignoreAMP: true
   };
 
   if (!uri) {
@@ -94,8 +95,11 @@ module.exports = function SitemapGenerator(uri, opts) {
   // fetch complete event
   crawler.on('fetchcomplete', (queueItem, page) => {
     const { url, depth } = queueItem;
-    // check if robots noindex is present
-    if (/<meta(?=[^>]+noindex).*?>/.test(page)) {
+
+    if (
+      /(<meta(?=[^>]+noindex).*?>)/.test(page) || // check if robots noindex is present
+      (options.ignoreAMP && /<html.+(amp|⚡).*?>/.test(page)) // check if it's an amp page
+    ) {
       emitter.emit('ignore', url);
     } else {
       emitter.emit('add', url);
