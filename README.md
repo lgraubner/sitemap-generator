@@ -62,6 +62,15 @@ Stops the running crawler and halts the sitemap generation.
 
 Returns the crawler instance. For more information about the crawler check the [simplecrawler docs](https://github.com/simplecrawler/simplecrawler#readme).
 
+This can be useful to ignore certain sites and don't add them to the sitemap.
+
+```JavaScript
+const crawler = generator.getCrawler();
+crawler.addFetchCondition((queueItem, referrerQueueItem, callback) => {
+  callback(!queueItem.path.match(/myregex/));
+});
+```
+
 ### queueURL(url)
 
 Add a URL to crawler's queue. Useful to help crawler fetch pages it can't find itself.
@@ -106,6 +115,13 @@ Type: `HTTPAgent`
 Default: `https.globalAgent`
 
 Controls what HTTPS agent to use. This is useful if you want configure HTTPS connection through a HTTP/HTTPS proxy (see [https-proxy-agent](https://www.npmjs.com/package/https-proxy-agent)).
+
+### ignoreAMP
+
+Type: `boolean`  
+Default: `true`
+
+Indicates whether [Google AMP pages](https://www.ampproject.org/) should be ignored and not be added to the sitemap.
 
 ### lastMod
 
