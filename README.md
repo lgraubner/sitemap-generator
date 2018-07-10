@@ -62,6 +62,15 @@ Stops the running crawler and halts the sitemap generation.
 
 Returns the crawler instance. For more information about the crawler check the [simplecrawler docs](https://github.com/simplecrawler/simplecrawler#readme).
 
+This can be useful to ignore certain sites and don't add them to the sitemap.
+
+```JavaScript
+const crawler = generator.getCrawler();
+crawler.addFetchCondition((queueItem, referrerQueueItem, callback) => {
+  callback(!queueItem.path.match(/myregex/));
+});
+```
+
 ### queueURL(url)
 
 Add a URL to crawler's queue. Useful to help crawler fetch pages it can't find itself.
