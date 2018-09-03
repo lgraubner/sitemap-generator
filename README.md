@@ -62,6 +62,15 @@ Stops the running crawler and halts the sitemap generation.
 
 Returns the crawler instance. For more information about the crawler check the [simplecrawler docs](https://github.com/simplecrawler/simplecrawler#readme).
 
+This can be useful to ignore certain sites and don't add them to the sitemap.
+
+```JavaScript
+const crawler = generator.getCrawler();
+crawler.addFetchCondition((queueItem, referrerQueueItem, callback) => {
+  callback(!queueItem.path.match(/myregex/));
+});
+```
+
 ### queueURL(url)
 
 Add a URL to crawler's queue. Useful to help crawler fetch pages it can't find itself.
@@ -73,7 +82,7 @@ There are a couple of options to adjust the sitemap output. In addition to the o
 ```JavaScript
 var generator = SitemapGenerator('http://example.com', {
   maxDepth: 0,
-  filepath: path.join(process.cwd(), 'sitemap.xml'),
+  filepath: './sitemap.xml',
   maxEntriesPerFile: 50000,
   stripQuerystring: true
 });
@@ -91,7 +100,7 @@ If defined, adds a `<changefreq>` line to each URL in the sitemap. Possible valu
 Type: `string`  
 Default: `./sitemap.xml`
 
-Filepath for the new sitemap. If multiple sitemaps are created "part_$index" is appended to each filename.
+Filepath for the new sitemap. If multiple sitemaps are created "part_$index" is appended to each filename. If you don't want to write a file at all you can pass `null` as filepath.
 
 ### httpAgent
 
@@ -107,12 +116,19 @@ Default: `https.globalAgent`
 
 Controls what HTTPS agent to use. This is useful if you want configure HTTPS connection through a HTTP/HTTPS proxy (see [https-proxy-agent](https://www.npmjs.com/package/https-proxy-agent)).
 
+### ignoreAMP
+
+Type: `boolean`  
+Default: `true`
+
+Indicates whether [Google AMP pages](https://www.ampproject.org/) should be ignored and not be added to the sitemap.
+
 ### lastMod
 
 Type: `boolean`  
 Default: `false`
 
-Whether to add a `<lastmod>` line to each URL in the sitemap, and fill it with today's date.
+Whether to add a `<lastmod>` line to each URL in the sitemap. If present the responses `Last-Modified` header will be used. Otherwise todays date is added.
 
 ### maxEntriesPerFile
 

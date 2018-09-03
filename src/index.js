@@ -6,6 +6,7 @@ const eachSeries = require('async/eachSeries');
 const cpFile = require('cp-file');
 const normalizeUrl = require('normalize-url');
 const mitt = require('mitt');
+const format = require('date-fns/format');
 
 const createCrawler = require('./createCrawler');
 const SitemapRotator = require('./SitemapRotator');
@@ -26,7 +27,8 @@ module.exports = function SitemapGenerator(uri, opts) {
     decodeResponses: true,
     lastMod: false,
     changeFreq: '',
-    priorityMap: []
+    priorityMap: [],
+    ignoreAMP: true
   };
 
   if (!uri) {
@@ -48,7 +50,9 @@ module.exports = function SitemapGenerator(uri, opts) {
       removeTrailingSlash: false
     })
   );
-  const sitemapPath = path.resolve(options.filepath);
+
+  // only resolve if sitemap path is truthy (a string preferably)
+  const sitemapPath = options.filepath && path.resolve(options.filepath);
 
   // we don't care about invalid certs
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -91,12 +95,20 @@ module.exports = function SitemapGenerator(uri, opts) {
   // fetch complete event
   crawler.on('fetchcomplete', (queueItem, page) => {
     const { url, depth } = queueItem;
-    // check if robots noindex is present
-    if (/<meta(?=[^>]+noindex).*?>/.test(page)) {
+
+    if (
+      /(<meta(?=[^>]+noindex).*?>)/.test(page) || // check if robots noindex is present
+      (options.ignoreAMP && /<html.+(amp|⚡).*?>/.test(page)) // check if it's an amp page
+    ) {
       emitter.emit('ignore', url);
     } else {
       emitter.emit('add', url);
-      sitemap.addURL(url, depth);
+
+      if (sitemapPath !== null) {
+        // eslint-disable-next-line
+        const lastMod = queueItem.stateData.headers['last-modified'];
+        sitemap.addURL(url, depth, lastMod && format(lastMod, 'YYYY-MM-DD'));
+      }
     }
   });
 
@@ -107,37 +119,45 @@ module.exports = function SitemapGenerator(uri, opts) {
 
     const cb = () => emitter.emit('done');
 
-    // move files
-    if (sitemaps.length > 1) {
-      // multiple sitemaps
-      let count = 1;
-      eachSeries(
-        sitemaps,
-        (tmpPath, done) => {
-          const newPath = extendFilename(sitemapPath, `_part${count}`);
+    if (sitemapPath !== null) {
+      // move files
+      if (sitemaps.length > 1) {
+        // multiple sitemaps
+        let count = 1;
+        eachSeries(
+          sitemaps,
+          (tmpPath, done) => {
+            const newPath = extendFilename(sitemapPath, `_part${count}`);
 
-          // copy and remove tmp file
-          cpFile(tmpPath, newPath).then(() => {
-            fs.unlink(tmpPath, () => {
-              done();
+            // copy and remove tmp file
+            cpFile(tmpPath, newPath).then(() => {
+              fs.unlink(tmpPath, () => {
+                done();
+              });
             });
-          });
 
-          count += 1;
-        },
-        () => {
-          const filename = path.basename(sitemapPath);
-          fs.writeFile(
-            sitemapPath,
-            createSitemapIndex(parsedUrl.toString(), filename, sitemaps.length),
-            cb
-          );
-        }
-      );
-    } else if (sitemaps.length) {
-      cpFile(sitemaps[0], sitemapPath).then(() => {
-        fs.unlink(sitemaps[0], cb);
-      });
+            count += 1;
+          },
+          () => {
+            const filename = path.basename(sitemapPath);
+            fs.writeFile(
+              sitemapPath,
+              createSitemapIndex(
+                parsedUrl.toString(),
+                filename,
+                sitemaps.length
+              ),
+              cb
+            );
+          }
+        );
+      } else if (sitemaps.length) {
+        cpFile(sitemaps[0], sitemapPath).then(() => {
+          fs.unlink(sitemaps[0], cb);
+        });
+      } else {
+        cb();
+      }
     } else {
       cb();
     }
