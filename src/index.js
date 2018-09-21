@@ -98,7 +98,7 @@ module.exports = function SitemapGenerator(uri, opts) {
 
     if (
       /(<meta(?=[^>]+noindex).*?>)/.test(page) || // check if robots noindex is present
-      (options.ignoreAMP && /<html.+(amp|⚡).*?>/.test(page)) // check if it's an amp page
+      (options.ignoreAMP && /<html[^>]+(amp|⚡)[^>]*>/.test(page)) // check if it's an amp page
     ) {
       emitter.emit('ignore', url);
     } else {
