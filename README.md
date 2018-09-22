@@ -196,17 +196,17 @@ generator.on('ignore', (url) => {
 
 <details>
 <summary>Does this work with React, Angular, ...</summary>
-This package don't care what frameworks and technologies you are using under the hood. The only requirement is, that your URL's return valid HTML. Therefore SSR (server side rendering) is required for single page apps as no JavaScript is executed.
+<p>This package don't care what frameworks and technologies you are using under the hood. The only requirement is, that your URL's return valid HTML. Therefore SSR (server side rendering) is required for single page apps as no JavaScript is executed.</p>
 </details>
 
 <details>
 <summary>Where to put this code</summary>
-This is basically up to you. You can execute this code manually and upload your sitemap by hand, or you can put this on your server and run this periodically to keep your sitemap up to date.
+<p>This is basically up to you. You can execute this code manually and upload your sitemap by hand, or you can put this on your server and run this periodically to keep your sitemap up to date.</p>
 </details>
 
 <details>
 <summary>Should I use this package or the CLI</summary>
-The CLI should suffice most of the common use cases. It has several options to tweak in case you want to bahave it differently. If you use case is more advanced and you need fine control about what the crawler should fetch you should use this package and the programmatic API.
+<p>The CLI should suffice most of the common use cases. It has several options to tweak in case you want to bahave it differently. If you use case is more advanced and you need fine control about what the crawler should fetch you should use this package and the programmatic API.</p>
 </details>
 
 ## License
