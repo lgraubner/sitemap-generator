@@ -6,6 +6,8 @@
 
 Generates a sitemap by crawling your site. Uses streams to efficiently write the sitemap to your drive and runs asynchronously to avoid blocking the thread. Is cappable of creating multiple sitemaps if threshold is reached. Respects robots.txt and meta tags.
 
+This package is not meant to be used in a production code base directly, but rather on the deployed product. This means you develop your app/website as usual, deploy it and create the sitemap with this tool _afterwards_. The simplest way is to use the [CLI](https://github.com/lgraubner/sitemap-generator-cli) (this is a different package!) to create the sitemap on the command line. If you have a more advanced usecase or want to adjust the crawler behavior you should use the programmtic version (this package). Create the crawler as needed and simply run it via `node mycrawler.js`.
+
 ## Table of contents
 
 - [Install](#install)
@@ -13,6 +15,7 @@ Generates a sitemap by crawling your site. Uses streams to efficiently write the
 - [API](#api)
 - [Options](#options)
 - [Events](#events)
+- [FAQ](#faq)
 - [License](#license)
 
 ## Install
@@ -100,7 +103,7 @@ If defined, adds a `<changefreq>` line to each URL in the sitemap. Possible valu
 Type: `string`  
 Default: `./sitemap.xml`
 
-Filepath for the new sitemap. If multiple sitemaps are created "part_$index" is appended to each filename. If you don't want to write a file at all you can pass `null` as filepath.
+Filepath for the new sitemap. If multiple sitemaps are created "part\_$index" is appended to each filename. If you don't want to write a file at all you can pass `null` as filepath.
 
 ### httpAgent
 
@@ -188,6 +191,23 @@ generator.on('ignore', (url) => {
   // log ignored url
 });
 ```
+
+## FAQ
+
+<details>
+<summary>Does this work with React, Angular, ...</summary>
+This package don't care what frameworks and technologies you are using under the hood. The only requirement is, that your URL's return valid HTML. Therefore SSR (server side rendering) is required for single page apps as no JavaScript is executed.
+</details>
+
+<details>
+<summary>Where to put this code</summary>
+This is basically up to you. You can execute this code manually and upload your sitemap by hand, or you can put this on your server and run this periodically to keep your sitemap up to date.
+</details>
+
+<details>
+<summary>Should I use this package or the CLI</summary>
+The CLI should suffice most of the common use cases. It has several options to tweak in case you want to bahave it differently. If you use case is more advanced and you need fine control about what the crawler should fetch you should use this package and the programmatic API.
+</details>
 
 ## License
 
