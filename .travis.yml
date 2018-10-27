@@ -1,9 +1,9 @@
 language: node_js
-​
+
 node_js: 8
-​
+
 deploy:
   provider: script
-  skip_cleanup: true
   script:
-    - npx semantic-release
+    - 'npx semantic-release'
+  skip_cleanup: true
