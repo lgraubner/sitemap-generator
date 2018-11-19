@@ -79,5 +79,8 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "release": {
+    "tagFormat": "${version}"
   }
 }
