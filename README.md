@@ -206,7 +206,7 @@ generator.on('ignore', (url) => {
 
 <details>
 <summary>Should I use this package or the CLI</summary>
-<p>The CLI should suffice most of the common use cases. It has several options to tweak in case you want to bahave it differently. If you use case is more advanced and you need fine control about what the crawler should fetch you should use this package and the programmatic API.</p>
+<p>The CLI should suffice most of the common use cases. It has several options to tweak in case you want it to behave differently. If your use case is more advanced and you need fine control about what the crawler should fetch, you should use this package and the programmatic API.</p>
 </details>
 
 ## License
