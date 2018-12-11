@@ -1,4 +1,4 @@
-const SitemapGenerator = require('../');
+const SitemapGenerator = require('../index.js');
 
 describe('#SitemapGenerator', () => {
   let gen;
@@ -21,5 +21,23 @@ describe('#SitemapGenerator', () => {
 
   test('should have method queueURL', () => {
     expect(gen).toHaveProperty('queueURL');
+  });
+});
+
+describe('Overriding the location', () => {
+  const mockFiles = {};
+
+  jest.doMock('fs', () => {
+    (location, contents) => {
+      mockFiles[location] = contents;
+    };
+  });
+
+  test('Overridden locations should be respected', () => {
+    SitemapGenerator('https://example.com', {
+      overrideLocation: 'https://example.com/sitemaps/'
+    });
+
+    expect(Object.keys(mockFiles)).toHaveLength(2);
   });
 });
