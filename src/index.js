@@ -28,7 +28,8 @@ module.exports = function SitemapGenerator(uri, opts) {
     lastMod: false,
     changeFreq: '',
     priorityMap: [],
-    ignoreAMP: true
+    ignoreAMP: true,
+    locationOverride: undefined
   };
 
   if (!uri) {
@@ -143,7 +144,7 @@ module.exports = function SitemapGenerator(uri, opts) {
             fs.writeFile(
               sitemapPath,
               createSitemapIndex(
-                parsedUrl.toString(),
+                options.locationOverride || parsedUrl.toString(),
                 filename,
                 sitemaps.length
               ),
