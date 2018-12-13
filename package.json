@@ -1,9 +1,12 @@
 {
-  "name": "sitemap-generator",
-  "version": "0.0.0-semantically-released",
+  "name": "@bbc/sitemap-generator",
+  "version": "1.0.0",
   "description": "Easily create XML sitemaps for your website.",
-  "homepage": "https://github.com/lgraubner/sitemap-generator",
-  "author": "Lars Graubner <mail@larsgraubner.de> (https://larsgraubner.com)",
+  "homepage": "https://github.com/bbc/sitemap-generator",
+  "contributors": [
+    "Lars Graubner <mail@larsgraubner.de> (https://larsgraubner.com)",
+    "Daniel Gallagher <daniel.gallagher@bbc.co.uk>"
+  ],
   "keywords": [
     "sitemap",
     "xml",
@@ -17,10 +20,10 @@
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lgraubner/sitemap-generator.git"
+    "url": "https://github.com/bbc/sitemap-generator.git"
   },
   "bugs": {
-    "url": "https://github.com/lgraubner/sitemap-generator/issues"
+    "url": "https://github.com/bbc/sitemap-generator/issues"
   },
   "dependencies": {
     "async": "2.6.1",
