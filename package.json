@@ -1,6 +1,6 @@
 {
   "name": "@bbc/sitemap-generator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Easily create XML sitemaps for your website.",
   "homepage": "https://github.com/bbc/sitemap-generator",
   "contributors": [
