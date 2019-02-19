@@ -147,6 +147,12 @@ Default: `[]`
 
 If provided, adds a `<priority>` line to each URL in the sitemap. Each value in priorityMap array corresponds with the depth of the URL being added. For example, the priority value given to a URL equals `priorityMap[depth - 1]`. If a URL's depth is greater than the length of the priorityMap array, the last value in the array will be used. Valid values are between `1.0` and `0.0`.
 
+Example:
+
+```javascript
+[1.0, 0.8, 0.6, 0.4, 0.2, 0]
+```
+
 ## Events
 
 The Sitemap Generator emits several events which can be listened to.
