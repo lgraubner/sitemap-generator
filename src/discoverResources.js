@@ -26,6 +26,9 @@ module.exports = (buffer, queueItem) => {
 
     // remove anchors
     href = href.replace(/(#.*)$/, '');
+    
+    //remove basic authentication
+    href = href.replace(/^\/?([^/]*@)/, '');
 
     // handle "//"
     if (/^\/\//.test(href)) {
