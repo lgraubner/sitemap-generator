@@ -133,6 +133,14 @@ Default: `false`
 
 Whether to add a `<lastmod>` line to each URL in the sitemap. If present the responses `Last-Modified` header will be used. Otherwise todays date is added.
 
+### lastModFormat
+
+Type: `string`  
+Default: `YYYY-MM-DD`
+
+Format for `<lastmod>` datetime string.
+
+
 ### maxEntriesPerFile
 
 Type: `number`  
