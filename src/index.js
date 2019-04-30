@@ -169,6 +169,7 @@ module.exports = function SitemapGenerator(uri, opts) {
     start: () => crawler.start(),
     stop: () => crawler.stop(),
     getCrawler: () => crawler,
+    getSitemap: () => sitemap,
     queueURL: url => {
       crawler.queueURL(url, undefined, false);
     },
