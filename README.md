@@ -147,7 +147,7 @@ Example:
 ```JavaScript
 const generator = SitemapGenerator(url, {
   ignore: url => {
-    // Prevent URLs from being added that contain `<pattern>.
+    // Prevent URLs from being added that contain `<pattern>`.
     return /<pattern>/g.test(url)
   }
 })
