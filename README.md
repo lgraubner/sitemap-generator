@@ -135,6 +135,24 @@ Default: `https.globalAgent`
 
 Controls what HTTPS agent to use. This is useful if you want configure HTTPS connection through a HTTP/HTTPS proxy (see [https-proxy-agent](https://www.npmjs.com/package/https-proxy-agent)).
 
+### ignore(url)
+
+Apply a test condition to a URL before it's added to the sitemap.
+
+Type: `function`
+Default: `null`
+
+Example:
+
+```JavaScript
+const generator = SitemapGenerator(url, {
+  ignore: url => {
+    // Prevent URLs from being added that contain `<pattern>.
+    return /<pattern>/g.test(url)
+  }
+})
+```
+
 ### ignoreAMP
 
 Type: `boolean`  
