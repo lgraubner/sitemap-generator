@@ -74,6 +74,22 @@ crawler.addFetchCondition((queueItem, referrerQueueItem, callback) => {
 });
 ```
 
+### getSitemap()
+
+Returns the sitemap instance (`SitemapRotator`).
+
+This can be useful to add static URLs to the sitemap:
+
+```JavaScript
+const crawler = generator.getCrawler()
+const sitemap = generator.getSitemap()
+
+// Add static URL on crawl init.
+crawler.on('crawlstart', () => {
+  sitemap.addURL('/my/static/url')
+})
+````
+
 ### queueURL(url)
 
 Add a URL to crawler's queue. Useful to help crawler fetch pages it can't find itself.
