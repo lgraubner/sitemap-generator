@@ -139,7 +139,7 @@ Controls what HTTPS agent to use. This is useful if you want configure HTTPS con
 
 Apply a test condition to a URL before it's added to the sitemap.
 
-Type: `function`
+Type: `function`  
 Default: `null`
 
 Example:
