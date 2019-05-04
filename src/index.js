@@ -28,7 +28,8 @@ module.exports = function SitemapGenerator(uri, opts) {
     lastMod: false,
     changeFreq: '',
     priorityMap: [],
-    ignoreAMP: true
+    ignoreAMP: true,
+    ignore: null
   };
 
   if (!uri) {
@@ -97,6 +98,7 @@ module.exports = function SitemapGenerator(uri, opts) {
     const { url, depth } = queueItem;
 
     if (
+      (opts.ignore && opts.ignore(url)) ||
       /(<meta(?=[^>]+noindex).*?>)/.test(page) || // check if robots noindex is present
       (options.ignoreAMP && /<html[^>]+(amp|⚡)[^>]*>/.test(page)) // check if it's an amp page
     ) {
@@ -167,6 +169,7 @@ module.exports = function SitemapGenerator(uri, opts) {
     start: () => crawler.start(),
     stop: () => crawler.stop(),
     getCrawler: () => crawler,
+    getSitemap: () => sitemap,
     queueURL: url => {
       crawler.queueURL(url, undefined, false);
     },
