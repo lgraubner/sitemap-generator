@@ -187,6 +187,13 @@ Example:
 [1.0, 0.8, 0.6, 0.4, 0.2, 0]
 ```
 
+### userAgent
+
+Type: `string`  
+Default: `Node/SitemapGenerator`
+
+Change the default crawler user agent.
+
 ## Events
 
 The Sitemap Generator emits several events which can be listened to.
