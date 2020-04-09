@@ -70,7 +70,7 @@ This can be useful to ignore certain sites and don't add them to the sitemap.
 ```JavaScript
 const crawler = generator.getCrawler();
 crawler.addFetchCondition((queueItem, referrerQueueItem, callback) => {
-  callback(!queueItem.path.match(/myregex/));
+  callback(null, !queueItem.path.match(/myregex/));
 });
 ```
 
