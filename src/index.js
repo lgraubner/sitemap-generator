@@ -85,7 +85,7 @@ module.exports = function SitemapGenerator(uri, opts) {
 
   crawler.on('fetchclienterror', (queueError, errorData) => {
     if (errorData.code === 'ENOTFOUND') {
-      throw new Error(`Site "${parsedUrl.href}" could not be found.`);
+      emitError(404, `Site ${JSON.stringify(queueError)} could not be found. REQUEST: ${JSON.stringify(errorData)}`);
     } else {
       emitError(400, errorData.message);
     }
