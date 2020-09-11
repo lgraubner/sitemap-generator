@@ -29,7 +29,8 @@ module.exports = function SitemapGenerator(uri, opts) {
     changeFreq: '',
     priorityMap: [],
     ignoreAMP: true,
-    ignore: null
+    ignore: null,
+    baseUrl: null
   };
 
   if (!uri) {
@@ -109,7 +110,12 @@ module.exports = function SitemapGenerator(uri, opts) {
       if (sitemapPath !== null) {
         // eslint-disable-next-line
         const lastMod = queueItem.stateData.headers['last-modified'];
-        sitemap.addURL(url, depth, lastMod && format(lastMod, 'YYYY-MM-DD'));
+        sitemap.addURL(
+          url,
+          depth,
+          lastMod && format(lastMod, 'YYYY-MM-DD'),
+          opts.baseUrl
+        );
       }
     }
   });

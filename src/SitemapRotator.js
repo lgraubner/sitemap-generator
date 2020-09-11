@@ -19,7 +19,16 @@ module.exports = function SitemapRotator(
     }, []);
 
   // adds url to stream
-  const addURL = (url, depth, lastMod = getCurrentDateTime()) => {
+  const addURL = (url, depth, lastMod = getCurrentDateTime(), baseUrl) => {
+    if (baseUrl) {
+      const urlInstance = new URL(url);
+      const baseUrlInstance = new URL(baseUrl);
+      urlInstance.protocol = baseUrlInstance.protocol;
+      urlInstance.host = baseUrlInstance.host;
+      urlInstance.port = baseUrlInstance.port;
+      url = urlInstance.href;
+    }
+
     const currentDateTime = lastModEnabled ? lastMod : null;
 
     // exclude existing sitemap.xml
