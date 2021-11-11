@@ -135,6 +135,20 @@ Default: `https.globalAgent`
 
 Controls what HTTPS agent to use. This is useful if you want configure HTTPS connection through a HTTP/HTTPS proxy (see [https-proxy-agent](https://www.npmjs.com/package/https-proxy-agent)).
 
+Example:
+
+```JavaScript
+// don't forget to:
+// npm i http-proxy-agent https-proxy-agent
+const HttpProxyAgent = require("http-proxy-agent");
+const HttpsProxyAgent = require("https-proxy-agent");
+const proxyAddress = 'http://localhost:1234';
+const httpProxyAgent = new HttpProxyAgent(proxyAddress);
+const httpsProxyAgent = new HttpsProxyAgent(proxyAddress);
+options.httpAgent = httpProxyAgent;
+options.httpsAgent = httpsProxyAgent;
+```
+
 ### ignore(url)
 
 Apply a test condition to a URL before it's added to the sitemap.
