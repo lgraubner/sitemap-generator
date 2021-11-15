@@ -174,6 +174,25 @@ Default: `true`
 
 Indicates whether [Google AMP pages](https://www.ampproject.org/) should be ignored and not be added to the sitemap.
 
+### onAdd(url)
+
+Modify the URL before it's added to the sitemap. A false or undefined return value ignores the URL, and it will not be added to the sitemap. Useful for crawling locally before hosting.
+
+Type: `function`
+Default: `null`
+
+Example:
+
+```JavaScript
+// create generator
+const generator = SitemapGenerator(host, {
+  onAdd: (url) => {
+    // Replace host in sitemap.
+    return url.replace(host, 'https://example.com')
+  }
+});
+```
+
 ### lastMod
 
 Type: `boolean`  
