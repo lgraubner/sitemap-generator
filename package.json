@@ -23,7 +23,7 @@
     "url": "https://github.com/lgraubner/sitemap-generator/issues"
   },
   "dependencies": {
-    "async": "2.6.1",
+    "async": "2.6.4",
     "cheerio": "1.0.0-rc.2",
     "cp-file": "6.0.0",
     "crypto-random-string": "1.0.0",
