@@ -15,12 +15,12 @@ module.exports = function SitemapStream() {
 
   const getPath = () => tmpPath;
 
-  const write = (url, currentDateTime, changeFreq, priority) => {
+  const write = (url, lastMod, changeFreq, priority) => {
     const escapedUrl = escapeUnsafe(url);
     stream.write('\n  <url>\n');
     stream.write(`    <loc>${escapedUrl}</loc>\n`);
-    if (currentDateTime) {
-      stream.write(`    <lastmod>${currentDateTime}</lastmod>\n`);
+    if (lastMod) {
+      stream.write(`    <lastmod>${lastMod}</lastmod>\n`);
     }
     if (changeFreq) {
       stream.write(`    <changefreq>${changeFreq}</changefreq>\n`);
@@ -39,6 +39,6 @@ module.exports = function SitemapStream() {
   return {
     getPath,
     write,
-    end,
+    end
   };
 };
