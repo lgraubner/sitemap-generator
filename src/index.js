@@ -76,6 +76,44 @@ module.exports = function SitemapGenerator(uri, opts) {
     });
   };
 
+  const parsePage = (queueItem, page, returnSitemapData = false) => {
+    const { url, depth } = queueItem;
+
+    if (
+      /(<meta(?=[^>]+noindex).*?>)/.test(page) || // check if robots noindex is present
+      (options.ignoreAMP && /<html[^>]+(amp|⚡)[^>]*>/.test(page)) // check if it's an amp page
+    ) {
+      emitter.emit('ignore', url);
+    } else {
+      emitter.emit('add', url);
+
+      if (sitemapPath !== null) {
+        // check for modified time tag
+        const headMetaLastMod = page.match(
+          /<meta property="article:modified_time" content="(.*?)"/
+        );
+        const lastMod =
+          headMetaLastMod && headMetaLastMod.length > 1
+            ? headMetaLastMod[1]
+            : queueItem.stateData.headers['last-modified'];
+
+        sitemap.addURL(
+          url,
+          depth,
+          lastMod && format(lastMod, options.lastModFormat)
+        );
+
+        if (returnSitemapData) {
+          return {
+            url,
+            lastMod,
+            formattedLastMod: format(lastMod, options.lastModFormat)
+          };
+        }
+      }
+    }
+  };
+
   crawler.on('fetch404', ({ url }) => emitError(404, url));
   crawler.on('fetchtimeout', ({ url }) => emitError(408, url));
   crawler.on('fetch410', ({ url }) => emitError(410, url));
@@ -94,24 +132,7 @@ module.exports = function SitemapGenerator(uri, opts) {
   crawler.on('fetchdisallowed', ({ url }) => emitter.emit('ignore', url));
 
   // fetch complete event
-  crawler.on('fetchcomplete', (queueItem, page) => {
-    const { url, depth } = queueItem;
-
-    if (
-      /(<meta(?=[^>]+noindex).*?>)/.test(page) || // check if robots noindex is present
-      (options.ignoreAMP && /<html[^>]+(amp|⚡)[^>]*>/.test(page)) // check if it's an amp page
-    ) {
-      emitter.emit('ignore', url);
-    } else {
-      emitter.emit('add', url);
-
-      if (sitemapPath !== null) {
-        // eslint-disable-next-line
-        const lastMod = queueItem.stateData.headers['last-modified'];
-        sitemap.addURL(url, depth, lastMod && format(lastMod, options.lastModFormat));
-      }
-    }
-  });
+  crawler.on('fetchcomplete', parsePage);
 
   crawler.on('complete', () => {
     sitemap.finish();
@@ -172,6 +193,7 @@ module.exports = function SitemapGenerator(uri, opts) {
       crawler.queueURL(url, undefined, false);
     },
     on: emitter.on,
-    off: emitter.off
+    off: emitter.off,
+    parsePage
   };
 };
