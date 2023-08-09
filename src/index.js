@@ -29,7 +29,8 @@ module.exports = function SitemapGenerator(uri, opts) {
     lastModFormat: 'YYYY-MM-DD',
     changeFreq: '',
     priorityMap: [],
-    ignoreAMP: true
+    ignoreAMP: true,
+    ignoreCanonacalized: true
   };
 
   if (!uri) {
@@ -86,12 +87,14 @@ module.exports = function SitemapGenerator(uri, opts) {
       emitter.emit('ignore', url);
     } else {
       // https://zendesk.atlassian.net/browse/WT-5268 - ignore canonicalized pages
-      const canonicalMatches = /<link rel="canonical" href="([^"]*)"/gi.exec(page);
-      if (canonicalMatches && canonicalMatches.length > 1) {
-        const canonical = matches[1];
-        if (canonical !== url) {
-          emitter.emit('ignore', url);
-          return;
+      if (options.ignoreCanonacalized) {
+        const canonicalMatches = /<link rel="canonical" href="([^"]*)"/gi.exec(page);
+        if (canonicalMatches && canonicalMatches.length > 1) {
+          const canonical = matches[1];
+          if (canonical !== url) {
+            emitter.emit('ignore', url);
+            return;
+          }
         }
       }
 

@@ -126,6 +126,13 @@ Default: `true`
 
 Indicates whether [Google AMP pages](https://www.ampproject.org/) should be ignored and not be added to the sitemap.
 
+### ignoreCanonacalized
+
+Type: `boolean`
+Default: `true`
+
+Indicates whether pages with non-matching canonical URLs should be ignored and not be added to the sitemap.
+
 ### lastMod
 
 Type: `boolean`  
